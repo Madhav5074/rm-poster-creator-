@@ -32,7 +32,6 @@
 
         <form id="posterForm" class="flex flex-col gap-6">
             <h1 class="text-4xl font-extrabold text-center text-blue-900 mb-2">Create Your RM Poster</h1>
-            <p class="text-xs text-gray-400 text-center -mt-4">Version: 2.1</p>
 
             <div>
                 <label for="rmPhoto" class="block text-sm font-semibold text-gray-700 mb-2">Upload RM Photo</label>
@@ -87,6 +86,10 @@
             <button id="downloadBtn" class="bg-gradient-to-r from-green-600 to-green-800 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:from-green-700 hover:to-green-900 transition duration-300 transform hover:scale-105">Download Poster</button>
         </div>
         
+    </div>
+    
+    <div class="absolute bottom-4 text-center w-full text-gray-400 text-sm">
+        Version 1.2
     </div>
 
     <script>
@@ -205,18 +208,18 @@
 
             // 3. Main Titles
             ctx.textAlign = 'center';
+            ctx.fillStyle = '#C20000'; // Bright Red for a bold "Congratulations"
+            ctx.font = 'bolder 90px Inter, sans-serif';
+            ctx.fillText("Congratulations!", canvasWidth / 2, 280);
+
             ctx.fillStyle = '#1a3263'; // Darker, formal blue
             ctx.font = 'bold 50px Inter, sans-serif';
-            ctx.fillText("Aditya Birla's", canvasWidth / 2, 280);
-
-            ctx.fillStyle = '#1a3263';
-            ctx.font = 'bolder 80px Inter, sans-serif';
-            ctx.fillText("Preferred RM", canvasWidth / 2, 370);
+            ctx.fillText("Aditya Birla’s Preferred RM", canvasWidth / 2, 360);
 
             // 4. RM Image (Circular)
             const imageSize = 380;
             const centerX = canvasWidth / 2;
-            const centerY = 370 + 250;
+            const centerY = 360 + 250;
             
             // Draw the shadow first so it's under the image
             ctx.save();
@@ -249,33 +252,33 @@
             // 6. Drawing the details text, grouped for better flow
             ctx.textAlign = 'center';
             let currentY = centerY + imageSize / 2 + 80;
-            const lineHeight = 55;
+            const lineHeight = 60; // Increased line height
 
             // Group 1: RM and BM Info
             ctx.fillStyle = '#4a5568'; // A softer gray for body text
-            ctx.font = 'bold 32px Inter, sans-serif';
+            ctx.font = 'bold 36px Inter, sans-serif';
             ctx.fillText(`${data.rmName}`, canvasWidth / 2, currentY);
-            ctx.font = '24px Inter, sans-serif';
-            currentY += 35;
-            ctx.fillText(`(RM)`, canvasWidth / 2, currentY);
-            currentY += 60;
-
-            ctx.font = 'bold 28px Inter, sans-serif';
-            ctx.fillText(`Branch Manager: ${data.bmName}`, canvasWidth / 2, currentY);
+            ctx.font = '28px Inter, sans-serif';
             currentY += 40;
+            ctx.fillText(`(RM)`, canvasWidth / 2, currentY);
+            currentY += 70;
+
+            ctx.font = 'bold 32px Inter, sans-serif';
+            ctx.fillText(`Branch Manager: ${data.bmName}`, canvasWidth / 2, currentY);
+            currentY += 45;
             ctx.fillText(`Branch: ${data.branchName} | Cluster: ${data.clusterName}`, canvasWidth / 2, currentY);
-            currentY += 80;
+            currentY += 90;
             
             // Group 2: Premium with background box
             const premiumText = `Premium : ₹${data.premium}`;
-            ctx.font = 'bold 55px Inter, sans-serif';
+            ctx.font = 'bold 60px Inter, sans-serif';
             const premiumTextMetrics = ctx.measureText(premiumText);
             const premiumTextWidth = premiumTextMetrics.width;
             const boxPadding = 40;
             const boxWidth = premiumTextWidth + (boxPadding * 2);
-            const boxHeight = 85;
+            const boxHeight = 95;
             const boxX = (canvasWidth / 2) - (boxWidth / 2);
-            const boxY = currentY - 60;
+            const boxY = currentY - 70;
 
             ctx.fillStyle = '#fef3e3'; // A formal, very light cream
             ctx.beginPath();
@@ -284,19 +287,18 @@
 
             ctx.fillStyle = '#FFC423'; // Bright gold
             ctx.fillText(premiumText, canvasWidth / 2, currentY);
-            currentY += 60;
+            currentY += 70;
             
             // Group 3: Product Type and Leadership
             ctx.fillStyle = '#4a5568';
-            ctx.font = '28px Inter, sans-serif';
+            ctx.font = '32px Inter, sans-serif';
             ctx.fillText(`Product Type: ${data.productType}`, canvasWidth / 2, currentY);
-            // Reduced gap between lines
-            currentY += 50;
+            currentY += 80; // Reduced gap
 
-            ctx.font = '28px Inter, sans-serif';
+            ctx.font = '32px Inter, sans-serif';
             ctx.fillText(`Under the Dynamic Leadership of`, canvasWidth / 2, currentY);
-            currentY += 40;
-            ctx.font = 'bold 32px Inter, sans-serif';
+            currentY += 45;
+            ctx.font = 'bold 36px Inter, sans-serif';
             ctx.fillText(`${data.clusterHead} Sir/Ma'am`, canvasWidth / 2, currentY);
 
             // Show the canvas and download button
