@@ -182,9 +182,9 @@
 
             // 1. Background Gradient
             const gradient = ctx.createLinearGradient(0, 0, 0, canvasHeight);
-            gradient.addColorStop(0, '#f0f4f8'); // Light blue-gray at the top
-            gradient.addColorStop(0.2, '#ffffff'); // White below
-            gradient.addColorStop(1, '#ffffff');
+            gradient.addColorStop(0, '#e8eff5'); // A very light, formal blue
+            gradient.addColorStop(0.2, '#f5f8fa'); // Lighter shade
+            gradient.addColorStop(1, '#ffffff'); // White at the bottom
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
@@ -204,19 +204,32 @@
 
             // 3. Main Titles
             ctx.textAlign = 'center';
-            ctx.fillStyle = '#1e3a8a';
+            ctx.fillStyle = '#1a3263'; // Darker, formal blue
             ctx.font = 'bold 50px Inter, sans-serif';
             ctx.fillText("Aditya Birla's", canvasWidth / 2, 280);
 
-            ctx.fillStyle = '#1e3a8a';
+            ctx.fillStyle = '#1a3263';
             ctx.font = 'bolder 80px Inter, sans-serif';
             ctx.fillText("Preferred RM", canvasWidth / 2, 370);
 
-            // 4. RM Image (Circular with shadow)
+            // 4. RM Image (Circular)
             const imageSize = 380;
             const centerX = canvasWidth / 2;
             const centerY = 370 + 250;
             
+            // Draw the shadow first so it's under the image
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, imageSize / 2, 0, Math.PI * 2);
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+            ctx.shadowBlur = 20;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 15;
+            ctx.fillStyle = '#ffffff'; // A temporary color for the shadow shape
+            ctx.fill();
+            ctx.restore(); // Reset shadow properties
+
+            // Now, draw the actual image
             ctx.save();
             ctx.beginPath();
             ctx.arc(centerX, centerY, imageSize / 2, 0, Math.PI * 2);
@@ -225,20 +238,12 @@
             ctx.drawImage(rmImage, centerX - imageSize / 2, centerY - imageSize / 2, imageSize, imageSize);
             ctx.restore();
 
-            // 5. Gold Circle Border with subtle shadow
+            // 5. Gold Circle Border
             ctx.beginPath();
             ctx.arc(centerX, centerY, imageSize / 2, 0, Math.PI * 2);
             ctx.lineWidth = 18;
-            ctx.strokeStyle = '#FFD700'; // A more vibrant gold color
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
-            ctx.shadowBlur = 15;
-            ctx.shadowOffsetX = 0;
-            ctx.shadowOffsetY = 10;
+            ctx.strokeStyle = '#FFC423'; // A brighter, more formal gold/yellow
             ctx.stroke();
-            
-            // Reset shadow for subsequent drawings
-            ctx.shadowBlur = 0;
-            ctx.shadowColor = 'rgba(0,0,0,0)';
 
             // 6. Drawing the details text, grouped for better flow
             ctx.textAlign = 'center';
@@ -246,7 +251,7 @@
             const lineHeight = 55;
 
             // Group 1: RM and BM Info
-            ctx.fillStyle = '#4b5563'; // A softer gray for body text
+            ctx.fillStyle = '#4a5568'; // A softer gray for body text
             ctx.font = 'bold 32px Inter, sans-serif';
             ctx.fillText(`${data.rmName}`, canvasWidth / 2, currentY);
             ctx.font = '24px Inter, sans-serif';
@@ -271,17 +276,17 @@
             const boxX = (canvasWidth / 2) - (boxWidth / 2);
             const boxY = currentY - 60;
 
-            ctx.fillStyle = '#fffbe6'; // A light cream background for the box
+            ctx.fillStyle = '#fef3e3'; // A formal, very light cream
             ctx.beginPath();
             ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 15);
             ctx.fill();
 
-            ctx.fillStyle = '#FFD700'; // Gold color for the premium amount
+            ctx.fillStyle = '#FFC423'; // Bright gold
             ctx.fillText(premiumText, canvasWidth / 2, currentY);
             currentY += 60;
             
             // Group 3: Product Type and Leadership
-            ctx.fillStyle = '#4b5563';
+            ctx.fillStyle = '#4a5568';
             ctx.font = '28px Inter, sans-serif';
             ctx.fillText(`Product Type: ${data.productType}`, canvasWidth / 2, currentY);
             currentY += 100;
