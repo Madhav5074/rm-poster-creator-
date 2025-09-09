@@ -84,9 +84,15 @@
                 </select>
             </div>
             
-            <div>
-                <label for="clusterHead" class="block text-sm font-semibold text-gray-700 mb-1">Cluster Head Name</label>
-                <input type="text" id="clusterHead" placeholder="Enter Cluster Head Name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <div class="flex gap-4">
+                <div class="flex-grow">
+                    <label for="clusterHeadTitle" class="block text-sm font-semibold text-gray-700 mb-1">Cluster Head Title</label>
+                    <input type="text" id="clusterHeadTitle" placeholder="e.g. Mr., Ms." required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="flex-grow">
+                    <label for="clusterHead" class="block text-sm font-semibold text-gray-700 mb-1">Cluster Head Name</label>
+                    <input type="text" id="clusterHead" placeholder="Enter Cluster Head Name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
             </div>
 
             <button type="submit" id="generateBtn" class="bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-3 rounded-lg shadow-lg hover:from-blue-700 hover:to-blue-900 transition duration-300 transform hover:scale-105">Generate Poster</button>
@@ -100,7 +106,7 @@
     </div>
     
     <div class="version-number">
-        Version 1.9
+        Version 2.0
     </div>
 
     <script>
@@ -117,10 +123,8 @@
 
         // Listen for user input to auto-format the premium amount
         premiumInput.addEventListener('input', function(event) {
-            // Remove all non-digit characters
             const value = this.value.replace(/[^0-9]/g, '');
             if (value) {
-                // Format with Indian commas and add the rupee sign
                 this.value = `₹${Number(value).toLocaleString('en-IN')}`;
             } else {
                 this.value = '';
@@ -145,6 +149,7 @@
                 clusterName: document.getElementById('clusterName').value,
                 premium: document.getElementById('premium').value,
                 productType: document.getElementById('productType').value,
+                clusterHeadTitle: document.getElementById('clusterHeadTitle').value,
                 clusterHead: document.getElementById('clusterHead').value
             };
 
@@ -180,7 +185,6 @@
             reader.readAsDataURL(file);
         });
 
-        // Custom message box function to avoid alert()
         function showMessage(message) {
             const container = document.querySelector('.container');
             let messageBox = document.getElementById('messageBox');
@@ -202,13 +206,11 @@
         }
 
         function drawPoster(rmImage, logoAB, logoHDFC, data) {
-            // Set canvas dimensions
             const canvasWidth = 1080;
             const canvasHeight = 1350;
             posterCanvas.width = canvasWidth;
             posterCanvas.height = canvasHeight;
 
-            // 1. Background Gradient
             const gradient = ctx.createLinearGradient(0, 0, 0, canvasHeight);
             gradient.addColorStop(0, '#e8eff5');
             gradient.addColorStop(0.2, '#f5f8fa');
@@ -216,33 +218,26 @@
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-            // 2. Logos (Updated placement and size)
             const logoMargin = 60;
             
-            // HDFC Logo
-            const hdfcLogoDesiredWidth = 250; // Smaller size
-            let hdfcLogoActualWidth = hdfcLogoDesiredWidth;
+            const hdfcLogoDesiredWidth = 250;
             let hdfcLogoActualHeight = 0;
             if (logoHDFC.complete && logoHDFC.naturalWidth > 0) {
                 hdfcLogoActualHeight = (logoHDFC.naturalHeight / logoHDFC.naturalWidth) * hdfcLogoDesiredWidth;
             }
             if (hdfcLogoActualHeight > 0) {
-                ctx.drawImage(logoHDFC, logoMargin, logoMargin, hdfcLogoActualWidth, hdfcLogoActualHeight);
+                ctx.drawImage(logoHDFC, logoMargin, logoMargin, hdfcLogoDesiredWidth, hdfcLogoActualHeight);
             }
 
-            // Aditya Birla Logo
-            const abLogoDesiredWidth = 200; // Smaller size
-            let abLogoActualWidth = abLogoDesiredWidth;
+            const abLogoDesiredWidth = 200;
             let abLogoActualHeight = 0;
             if (logoAB.complete && logoAB.naturalWidth > 0) {
                 abLogoActualHeight = (logoAB.naturalHeight / logoAB.naturalWidth) * abLogoDesiredWidth;
             }
             if (abLogoActualHeight > 0) {
-                ctx.drawImage(logoAB, canvasWidth - abLogoActualWidth - logoMargin, logoMargin, abLogoActualWidth, abLogoActualHeight);
+                ctx.drawImage(logoAB, canvasWidth - abLogoDesiredWidth - logoMargin, logoMargin, abLogoDesiredWidth, abLogoActualHeight);
             }
 
-
-            // 3. Main Titles
             ctx.textAlign = 'center';
             ctx.fillStyle = '#C20000';
             ctx.font = 'bolder 90px Inter, sans-serif';
@@ -252,12 +247,10 @@
             ctx.font = 'bold 50px Inter, sans-serif';
             ctx.fillText("Aditya Birla’s Preferred RM", canvasWidth / 2, 360);
 
-            // 4. RM Image (Circular with cropping and shadow)
             const imageSize = 380;
             const centerX = canvasWidth / 2;
             const centerY = 360 + 250;
             
-            // Draw the shadow first so it's under the image
             ctx.save();
             ctx.beginPath();
             ctx.arc(centerX, centerY, imageSize / 2, 0, Math.PI * 2);
@@ -269,7 +262,6 @@
             ctx.fill();
             ctx.restore();
 
-            // Calculate source coordinates for square cropping
             let sourceX = 0;
             let sourceY = 0;
             let sourceSize = Math.min(rmImage.width, rmImage.height);
@@ -279,7 +271,6 @@
                 sourceY = (rmImage.height - sourceSize) / 2;
             }
 
-            // Now, draw the cropped and clipped image
             ctx.save();
             ctx.beginPath();
             ctx.arc(centerX, centerY, imageSize / 2, 0, Math.PI * 2);
@@ -288,18 +279,15 @@
             ctx.drawImage(rmImage, sourceX, sourceY, sourceSize, sourceSize, centerX - imageSize / 2, centerY - imageSize / 2, imageSize, imageSize);
             ctx.restore();
 
-            // 5. Gold Circle Border
             ctx.beginPath();
             ctx.arc(centerX, centerY, imageSize / 2, 0, Math.PI * 2);
             ctx.lineWidth = 18;
             ctx.strokeStyle = '#FFC423';
             ctx.stroke();
 
-            // 6. Drawing the details text, grouped for better flow
             ctx.textAlign = 'center';
             let currentY = centerY + imageSize / 2 + 80;
             
-            // Group 1: RM and BM Info
             ctx.fillStyle = '#1a3263';
             ctx.font = 'bold 52px Inter, sans-serif';
             ctx.fillText(`${data.rmName}`, canvasWidth / 2, currentY);
@@ -316,7 +304,6 @@
             ctx.fillText(`Branch: ${data.branchName} | Cluster: ${data.clusterName}`, canvasWidth / 2, currentY);
             currentY += 90;
             
-            // Group 2: Premium with background box and black border
             const premiumText = `Premium : ${data.premium}`;
             ctx.font = 'bold 60px Inter, sans-serif';
             const premiumTextMetrics = ctx.measureText(premiumText);
@@ -327,23 +314,19 @@
             const boxX = (canvasWidth / 2) - (boxWidth / 2);
             const boxY = currentY - 70;
 
-            // Draw the box background (Light Red)
             ctx.fillStyle = '#FFDCDC';
             ctx.beginPath();
             ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 15);
             ctx.fill();
 
-            // Draw the black border
             ctx.strokeStyle = '#000000';
             ctx.lineWidth = 2;
             ctx.stroke();
             
-            // Draw the premium text (Bright Red)
             ctx.fillStyle = '#E70000';
             ctx.fillText(premiumText, canvasWidth / 2, currentY);
             currentY += 70;
             
-            // Group 3: Product Type and Leadership
             ctx.fillStyle = '#4a5568';
             ctx.font = '32px Inter, sans-serif';
             ctx.fillText(`Product Type: ${data.productType}`, canvasWidth / 2, currentY);
@@ -353,9 +336,8 @@
             ctx.fillText(`Under the Dynamic Leadership of`, canvasWidth / 2, currentY);
             currentY += 45;
             ctx.font = 'bold 36px Inter, sans-serif';
-            ctx.fillText(`${data.clusterHead} Sir/Ma'am`, canvasWidth / 2, currentY);
+            ctx.fillText(`${data.clusterHeadTitle} ${data.clusterHead}`, canvasWidth / 2, currentY);
 
-            // Show the canvas and download button
             posterCanvas.style.display = 'block';
             downloadBtn.style.display = 'block';
             posterForm.style.display = 'none';
