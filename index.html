@@ -24,6 +24,13 @@
         #posterCanvas, #downloadBtn {
             display: none;
         }
+        .version-number {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            font-size: 0.875rem;
+            color: #9ca3af;
+        }
     </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-6">
@@ -88,8 +95,8 @@
         
     </div>
     
-    <div class="absolute bottom-4 text-center w-full text-gray-400 text-sm">
-        Version 1.2
+    <div class="version-number">
+        Version 1.3
     </div>
 
     <script>
@@ -98,10 +105,23 @@
         const posterCanvas = document.getElementById('posterCanvas');
         const ctx = posterCanvas.getContext('2d');
         const downloadBtn = document.getElementById('downloadBtn');
+        const premiumInput = document.getElementById('premium');
         
         // Define the logo URLs - please ensure these paths are correct
         const logoUrlAB = './assets/aditya-birla-logo.png';
         const logoUrlHDFC = './assets/hdfc-logo.png';
+
+        // Listen for user input to auto-format the premium amount
+        premiumInput.addEventListener('input', function(event) {
+            // Remove all non-digit characters
+            const value = this.value.replace(/[^0-9]/g, '');
+            if (value) {
+                // Format with Indian commas and add the rupee sign
+                this.value = `₹${Number(value).toLocaleString('en-IN')}`;
+            } else {
+                this.value = '';
+            }
+        });
 
         posterForm.addEventListener('submit', function(event) {
             event.preventDefault();
@@ -270,7 +290,7 @@
             currentY += 90;
             
             // Group 2: Premium with background box
-            const premiumText = `Premium : ₹${data.premium}`;
+            const premiumText = `${data.premium}`;
             ctx.font = 'bold 60px Inter, sans-serif';
             const premiumTextMetrics = ctx.measureText(premiumText);
             const premiumTextWidth = premiumTextMetrics.width;
