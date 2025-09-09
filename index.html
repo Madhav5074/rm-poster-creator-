@@ -100,7 +100,7 @@
     </div>
     
     <div class="version-number">
-        Version 1.8
+        Version 1.9
     </div>
 
     <script>
@@ -218,17 +218,29 @@
 
             // 2. Logos (Updated placement and size)
             const logoMargin = 60;
-            const hdfcLogoWidth = 350;
-            const hdfcLogoHeight = (logoHDFC.complete && logoHDFC.naturalWidth > 0) ? (logoHDFC.naturalHeight / logoHDFC.naturalWidth) * hdfcLogoWidth : 0;
-            if (hdfcLogoHeight > 0) {
-                ctx.drawImage(logoHDFC, logoMargin, logoMargin, hdfcLogoWidth, hdfcLogoHeight);
+            
+            // HDFC Logo
+            const hdfcLogoDesiredWidth = 250; // Smaller size
+            let hdfcLogoActualWidth = hdfcLogoDesiredWidth;
+            let hdfcLogoActualHeight = 0;
+            if (logoHDFC.complete && logoHDFC.naturalWidth > 0) {
+                hdfcLogoActualHeight = (logoHDFC.naturalHeight / logoHDFC.naturalWidth) * hdfcLogoDesiredWidth;
+            }
+            if (hdfcLogoActualHeight > 0) {
+                ctx.drawImage(logoHDFC, logoMargin, logoMargin, hdfcLogoActualWidth, hdfcLogoActualHeight);
             }
 
-            const abLogoWidth = 280;
-            const abLogoHeight = (logoAB.complete && logoAB.naturalWidth > 0) ? (logoAB.naturalHeight / abLogoWidth) * abLogoWidth : 0; // Fixed calculation
-            if (abLogoHeight > 0) {
-                ctx.drawImage(logoAB, canvasWidth - abLogoWidth - logoMargin, logoMargin, abLogoWidth, abLogoHeight);
+            // Aditya Birla Logo
+            const abLogoDesiredWidth = 200; // Smaller size
+            let abLogoActualWidth = abLogoDesiredWidth;
+            let abLogoActualHeight = 0;
+            if (logoAB.complete && logoAB.naturalWidth > 0) {
+                abLogoActualHeight = (logoAB.naturalHeight / logoAB.naturalWidth) * abLogoDesiredWidth;
             }
+            if (abLogoActualHeight > 0) {
+                ctx.drawImage(logoAB, canvasWidth - abLogoActualWidth - logoMargin, logoMargin, abLogoActualWidth, abLogoActualHeight);
+            }
+
 
             // 3. Main Titles
             ctx.textAlign = 'center';
@@ -289,14 +301,14 @@
             
             // Group 1: RM and BM Info
             ctx.fillStyle = '#1a3263';
-            ctx.font = 'bold 52px Inter, sans-serif'; // Even bigger font
+            ctx.font = 'bold 52px Inter, sans-serif';
             ctx.fillText(`${data.rmName}`, canvasWidth / 2, currentY);
             
             ctx.fillStyle = '#4a5568';
             ctx.font = '28px Inter, sans-serif';
-            currentY += 40; // Reduced spacing
+            currentY += 40;
             ctx.fillText(`(RM)`, canvasWidth / 2, currentY);
-            currentY += 50; // Further reduced spacing
+            currentY += 50;
 
             ctx.font = 'bold 32px Inter, sans-serif';
             ctx.fillText(`Branch Manager: ${data.bmName}`, canvasWidth / 2, currentY);
@@ -316,7 +328,7 @@
             const boxY = currentY - 70;
 
             // Draw the box background (Light Red)
-            ctx.fillStyle = '#FFDCDC'; // Light Red
+            ctx.fillStyle = '#FFDCDC';
             ctx.beginPath();
             ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 15);
             ctx.fill();
@@ -327,7 +339,7 @@
             ctx.stroke();
             
             // Draw the premium text (Bright Red)
-            ctx.fillStyle = '#E70000'; // Bright Red
+            ctx.fillStyle = '#E70000';
             ctx.fillText(premiumText, canvasWidth / 2, currentY);
             currentY += 70;
             
