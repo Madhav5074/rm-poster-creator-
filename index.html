@@ -4,88 +4,86 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aditya Birla Poster Generator</title>
-    <!-- Use a simple, clean font from Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS for a clean, modern look -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f2f5;
+            background-color: #f0f4f8; /* Softer, light blue background */
         }
         .container {
-            max-width: 480px;
+            max-width: 550px; /* Slightly wider container */
             margin: auto;
         }
         canvas {
             border: 2px solid #e2e8f0;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 1.5rem; /* Larger radius for a softer look */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Bolder shadow */
         }
         /* Hide the canvas and download link initially */
-        #posterCanvas, #downloadLink {
+        #posterCanvas, #downloadBtn {
             display: none;
         }
     </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-6">
 
-    <div class="container bg-white p-8 rounded-2xl shadow-xl flex flex-col gap-6">
+    <div class="container bg-white p-10 rounded-3xl shadow-2xl flex flex-col gap-8">
 
-        <!-- Form for user input -->
-        <form id="posterForm" class="flex flex-col gap-4">
-            <h1 class="text-3xl font-bold text-center text-blue-900 mb-2">Create Your RM Poster</h1>
+        <form id="posterForm" class="flex flex-col gap-6">
+            <h1 class="text-4xl font-extrabold text-center text-blue-900 mb-2">Create Your RM Poster</h1>
 
-            <!-- RM Photo Upload -->
             <div>
-                <label for="rmPhoto" class="block text-sm font-semibold text-gray-700 mb-1">Upload RM Photo</label>
-                <input type="file" id="rmPhoto" accept="image/*" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <label for="rmPhoto" class="block text-sm font-semibold text-gray-700 mb-2">Upload RM Photo</label>
+                <input type="file" id="rmPhoto" accept="image/*" class="w-full text-sm text-gray-500
+                    file:mr-4 file:py-2 file:px-4
+                    file:rounded-full file:border-0
+                    file:text-sm file:font-semibold
+                    file:bg-blue-50 file:text-blue-700
+                    hover:file:bg-blue-100 cursor-pointer">
             </div>
             
-            <!-- Other Input Fields -->
             <div>
                 <label for="rmName" class="block text-sm font-semibold text-gray-700 mb-1">RM Name</label>
-                <input type="text" id="rmName" placeholder="Enter RM Name" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" id="rmName" placeholder="Enter RM Name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
             
             <div>
                 <label for="bmName" class="block text-sm font-semibold text-gray-700 mb-1">Branch Manager Name</label>
-                <input type="text" id="bmName" placeholder="Enter Branch Manager Name" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" id="bmName" placeholder="Enter Branch Manager Name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
             <div>
                 <label for="branchName" class="block text-sm font-semibold text-gray-700 mb-1">Branch Name</label>
-                <input type="text" id="branchName" placeholder="Enter Branch Name" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" id="branchName" placeholder="Enter Branch Name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
             <div>
                 <label for="clusterName" class="block text-sm font-semibold text-gray-700 mb-1">Cluster Name</label>
-                <input type="text" id="clusterName" placeholder="Enter Cluster Name" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" id="clusterName" placeholder="Enter Cluster Name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
             <div>
                 <label for="premium" class="block text-sm font-semibold text-gray-700 mb-1">Premium Amount</label>
-                <input type="text" id="premium" placeholder="Enter Premium Amount" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" id="premium" placeholder="Enter Premium Amount" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
             <div>
                 <label for="productType" class="block text-sm font-semibold text-gray-700 mb-1">Product Type</label>
-                <input type="text" id="productType" placeholder="Enter Product Type" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" id="productType" placeholder="Enter Product Type" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
             
             <div>
                 <label for="clusterHead" class="block text-sm font-semibold text-gray-700 mb-1">Cluster Head Name</label>
-                <input type="text" id="clusterHead" placeholder="Enter Cluster Head Name" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" id="clusterHead" placeholder="Enter Cluster Head Name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
-            <!-- Generate Button -->
-            <button type="submit" id="generateBtn" class="bg-blue-600 text-white font-bold py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">Generate Poster</button>
+            <button type="submit" id="generateBtn" class="bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-3 rounded-lg shadow-lg hover:from-blue-700 hover:to-blue-900 transition duration-300 transform hover:scale-105">Generate Poster</button>
         </form>
 
-        <!-- Container for the generated poster and download link -->
-        <div id="posterContainer" class="flex flex-col items-center gap-4">
-            <canvas id="posterCanvas" width="1080" height="1080"></canvas>
-            <button id="downloadBtn" class="bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-green-700 transition duration-300">Download Poster</button>
+        <div id="posterContainer" class="flex flex-col items-center gap-6">
+            <canvas id="posterCanvas" width="1080" height="1350"></canvas>
+            <button id="downloadBtn" class="bg-gradient-to-r from-green-600 to-green-800 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:from-green-700 hover:to-green-900 transition duration-300 transform hover:scale-105">Download Poster</button>
         </div>
         
     </div>
@@ -97,9 +95,9 @@
         const ctx = posterCanvas.getContext('2d');
         const downloadBtn = document.getElementById('downloadBtn');
         
-        // Define the logo URLs
+        // Define the logo URLs - please ensure these paths are correct
         const logoUrlAB = './assets/aditya-birla-logo.png';
-        const logoUrlHDFC = './assets/hdfc-logo.png'; // Updated to a local path
+        const logoUrlHDFC = './assets/hdfc-logo.png';
 
         posterForm.addEventListener('submit', function(event) {
             event.preventDefault();
@@ -134,7 +132,7 @@
                 logoHDFC.src = logoUrlHDFC;
                 
                 let loadedCount = 0;
-                const totalToLoad = 3; // Now we have 3 images to load
+                const totalToLoad = 3; 
                 
                 const checkIfLoaded = () => {
                     loadedCount++;
@@ -147,22 +145,9 @@
                 logoAB.onload = checkIfLoaded;
                 logoHDFC.onload = checkIfLoaded;
                 
-                rmImage.onerror = () => {
-                    console.error("RM image failed to load. Proceeding without logo.");
-                    checkIfLoaded();
-                };
-
-                logoAB.onerror = () => {
-                    console.error("Aditya Birla logo failed to load. Proceeding without logo.");
-                    logoAB.src = ''; // Clear source to prevent retries
-                    checkIfLoaded();
-                };
-
-                logoHDFC.onerror = () => {
-                    console.error("HDFC logo failed to load. Proceeding without logo.");
-                    logoHDFC.src = ''; // Clear source to prevent retries
-                    checkIfLoaded();
-                };
+                rmImage.onerror = () => { console.error("RM image failed to load."); checkIfLoaded(); };
+                logoAB.onerror = () => { console.error("Aditya Birla logo failed to load."); logoAB.src = ''; checkIfLoaded(); };
+                logoHDFC.onerror = () => { console.error("HDFC logo failed to load."); logoHDFC.src = ''; checkIfLoaded(); };
             };
             reader.readAsDataURL(file);
         });
@@ -191,50 +176,47 @@
         function drawPoster(rmImage, logoAB, logoHDFC, data) {
             // Set canvas dimensions
             const canvasWidth = 1080;
-            const canvasHeight = 1080;
+            const canvasHeight = 1350; // Increased height for a poster feel
             posterCanvas.width = canvasWidth;
             posterCanvas.height = canvasHeight;
-            
-            // --- Drawing the Poster ---
-            
-            // 1. Background
-            ctx.fillStyle = '#ffffff';
+
+            // 1. Background Gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvasHeight);
+            gradient.addColorStop(0, '#f0f4f8'); // Light blue-gray at the top
+            gradient.addColorStop(0.2, '#ffffff'); // White below
+            gradient.addColorStop(1, '#ffffff');
+            ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-            // 2. Draw the Aditya Birla Health Insurance logo
-            const logoMargin = 50;
-            const logoWidth = 250; 
-            const logoHeightAB = logoAB.complete && logoAB.naturalWidth > 0 ? (logoAB.naturalHeight / logoAB.naturalWidth) * logoWidth : 0;
-            const logoYAB = logoMargin;
-            const logoXAB = canvasWidth - logoWidth - logoMargin;
-            if (logoHeightAB > 0) {
-                ctx.drawImage(logoAB, logoXAB, logoYAB, logoWidth, logoHeightAB);
+            // 2. Logos (Updated placement and size)
+            const logoMargin = 60;
+            const hdfcLogoWidth = 350; // Larger HDFC logo
+            const hdfcLogoHeight = (logoHDFC.complete && logoHDFC.naturalWidth > 0) ? (logoHDFC.naturalHeight / logoHDFC.naturalWidth) * hdfcLogoWidth : 0;
+            if (hdfcLogoHeight > 0) {
+                ctx.drawImage(logoHDFC, logoMargin, logoMargin, hdfcLogoWidth, hdfcLogoHeight);
             }
 
-            // 3. Draw the HDFC logo
-            const logoHDFCWidth = 250; 
-            const logoHDFCHeight = logoHDFC.complete && logoHDFC.naturalWidth > 0 ? (logoHDFC.naturalHeight / logoHDFC.naturalWidth) * logoHDFCWidth : 0;
-            const logoYHDFC = logoMargin;
-            const logoXHDFC = logoMargin;
-            if (logoHDFCHeight > 0) {
-                ctx.drawImage(logoHDFC, logoXHDFC, logoYHDFC, logoHDFCWidth, logoHDFCHeight);
+            const abLogoWidth = 280; // Slightly smaller Aditya Birla logo
+            const abLogoHeight = (logoAB.complete && logoAB.naturalWidth > 0) ? (logoAB.naturalHeight / logoAB.naturalWidth) * abLogoWidth : 0;
+            if (abLogoHeight > 0) {
+                ctx.drawImage(logoAB, canvasWidth - abLogoWidth - logoMargin, logoMargin, abLogoWidth, abLogoHeight);
             }
 
-
-            // Main Title
-            const titleY = 220; 
-            ctx.fillStyle = '#1e3a8a'; 
-            ctx.font = 'bold 60px Inter, sans-serif';
+            // 3. Main Titles
             ctx.textAlign = 'center';
-            ctx.fillText("Aditya Birla's", canvasWidth / 2, titleY);
-            ctx.font = 'bold 70px Inter, sans-serif';
-            const preferredRmY = titleY + 90;
-            ctx.fillText("Preferred RM", canvasWidth / 2, preferredRmY);
-            
-            // Draw the RM Image (circular)
-            const imageSize = 300; 
+            ctx.fillStyle = '#1e3a8a';
+            ctx.font = 'bold 50px Inter, sans-serif';
+            ctx.fillText("Aditya Birla's", canvasWidth / 2, 280);
+
+            ctx.fillStyle = '#1e3a8a';
+            ctx.font = 'bolder 80px Inter, sans-serif';
+            ctx.fillText("Preferred RM", canvasWidth / 2, 370);
+
+            // 4. RM Image (Circular with shadow)
+            const imageSize = 380;
             const centerX = canvasWidth / 2;
-            const centerY = preferredRmY + 180; 
+            const centerY = 370 + 250;
+            
             ctx.save();
             ctx.beginPath();
             ctx.arc(centerX, centerY, imageSize / 2, 0, Math.PI * 2);
@@ -243,63 +225,74 @@
             ctx.drawImage(rmImage, centerX - imageSize / 2, centerY - imageSize / 2, imageSize, imageSize);
             ctx.restore();
 
-            // Add the circle border
+            // 5. Gold Circle Border with subtle shadow
             ctx.beginPath();
             ctx.arc(centerX, centerY, imageSize / 2, 0, Math.PI * 2);
-            ctx.lineWidth = 15;
-            ctx.strokeStyle = '#facc15'; 
+            ctx.lineWidth = 18;
+            ctx.strokeStyle = '#FFD700'; // A more vibrant gold color
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
+            ctx.shadowBlur = 15;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 10;
             ctx.stroke();
             
-            // Drawing the details text, centered and bold
-            ctx.textAlign = 'center';
-            ctx.fillStyle = '#333333';
-            ctx.font = 'bold 30px Inter, sans-serif';
-            let currentY = centerY + imageSize / 2 + 50;
-            const lineHeight = 45;
-            
-            ctx.fillText(`RM Name : ${data.rmName}`, canvasWidth / 2, currentY);
-            currentY += lineHeight;
-            ctx.fillText(`Branch Manager Name : ${data.bmName}`, canvasWidth / 2, currentY);
-            currentY += lineHeight;
-            ctx.fillText(`Branch Name : ${data.branchName}`, canvasWidth / 2, currentY);
-            currentY += lineHeight;
-            ctx.fillText(`Cluster : ${data.clusterName}`, canvasWidth / 2, currentY);
-            currentY += lineHeight + 10;
+            // Reset shadow for subsequent drawings
+            ctx.shadowBlur = 0;
+            ctx.shadowColor = 'rgba(0,0,0,0)';
 
-            // The "Premium" line - with a background box and rounded corners
-            const premiumText = `Premium : ${data.premium}`;
-            ctx.font = 'bold 40px Inter, sans-serif';
+            // 6. Drawing the details text, grouped for better flow
+            ctx.textAlign = 'center';
+            let currentY = centerY + imageSize / 2 + 80;
+            const lineHeight = 55;
+
+            // Group 1: RM and BM Info
+            ctx.fillStyle = '#4b5563'; // A softer gray for body text
+            ctx.font = 'bold 32px Inter, sans-serif';
+            ctx.fillText(`${data.rmName}`, canvasWidth / 2, currentY);
+            ctx.font = '24px Inter, sans-serif';
+            currentY += 35;
+            ctx.fillText(`(RM)`, canvasWidth / 2, currentY);
+            currentY += 60;
+
+            ctx.font = 'bold 28px Inter, sans-serif';
+            ctx.fillText(`Branch Manager: ${data.bmName}`, canvasWidth / 2, currentY);
+            currentY += 40;
+            ctx.fillText(`Branch: ${data.branchName} | Cluster: ${data.clusterName}`, canvasWidth / 2, currentY);
+            currentY += 80;
+            
+            // Group 2: Premium with background box
+            const premiumText = `Premium : ₹${data.premium}`;
+            ctx.font = 'bold 55px Inter, sans-serif';
             const premiumTextMetrics = ctx.measureText(premiumText);
             const premiumTextWidth = premiumTextMetrics.width;
-            
-            ctx.fillStyle = '#f3f4f6';
-            const paddingX = 20;
-            const boxWidth = premiumTextWidth + (paddingX * 2);
-            const boxHeight = 50;
+            const boxPadding = 40;
+            const boxWidth = premiumTextWidth + (boxPadding * 2);
+            const boxHeight = 85;
             const boxX = (canvasWidth / 2) - (boxWidth / 2);
-            const boxY = currentY - 40;
+            const boxY = currentY - 60;
 
+            ctx.fillStyle = '#fffbe6'; // A light cream background for the box
             ctx.beginPath();
-            ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 10);
+            ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 15);
             ctx.fill();
-            
-            ctx.fillStyle = '#facc15';
+
+            ctx.fillStyle = '#FFD700'; // Gold color for the premium amount
             ctx.fillText(premiumText, canvasWidth / 2, currentY);
-            currentY += lineHeight + 10;
+            currentY += 60;
+            
+            // Group 3: Product Type and Leadership
+            ctx.fillStyle = '#4b5563';
+            ctx.font = '28px Inter, sans-serif';
+            ctx.fillText(`Product Type: ${data.productType}`, canvasWidth / 2, currentY);
+            currentY += 100;
 
-            // Product Type
-            ctx.font = 'bold 30px Inter, sans-serif';
-            ctx.fillStyle = '#333333';
-            ctx.fillText(`Product Type : ${data.productType}`, canvasWidth / 2, currentY);
-            currentY += lineHeight + 50;
+            ctx.font = '28px Inter, sans-serif';
+            ctx.fillText(`Under the Dynamic Leadership of`, canvasWidth / 2, currentY);
+            currentY += 40;
+            ctx.font = 'bold 32px Inter, sans-serif';
+            ctx.fillText(`${data.clusterHead} Sir/Ma'am`, canvasWidth / 2, currentY);
 
-            // Ending line
-            ctx.textAlign = 'center';
-            ctx.font = 'bold 30px Inter, sans-serif';
-            ctx.fillStyle = '#333333';
-            ctx.fillText(`Under Dynamic Leadership of ${data.clusterHead} Sir/ Ma'am`, canvasWidth / 2, currentY);
-
-            // Show the canvas and download link
+            // Show the canvas and download button
             posterCanvas.style.display = 'block';
             downloadBtn.style.display = 'block';
             posterForm.style.display = 'none';
