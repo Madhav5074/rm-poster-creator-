@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aditya Birla Poster Generator</title>
+    <!-- Use a simple, clean font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS for a clean, modern look -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .container {
+            max-width: 480px;
+            margin: auto;
+        }
+        canvas {
+            border: 2px solid #e2e8f0;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        /* Hide the canvas and download link initially */
+        #posterCanvas, #downloadLink {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <div class="container bg-white p-8 rounded-2xl shadow-xl flex flex-col gap-6">
+
+        <!-- Form for user input -->
+        <form id="posterForm" class="flex flex-col gap-4">
+            <h1 class="text-3xl font-bold text-center text-blue-900 mb-2">Create Your RM Poster</h1>
+
+            <!-- RM Photo Upload -->
+            <div>
+                <label for="rmPhoto" class="block text-sm font-semibold text-gray-700 mb-1">Upload RM Photo</label>
+                <input type="file" id="rmPhoto" accept="image/*" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <!-- Other Input Fields -->
+            <div>
+                <label for="rmName" class="block text-sm font-semibold text-gray-700 mb-1">RM Name</label>
+                <input type="text" id="rmName" placeholder="Enter RM Name" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <div>
+                <label for="bmName" class="block text-sm font-semibold text-gray-700 mb-1">Branch Manager Name</label>
+                <input type="text" id="bmName" placeholder="Enter Branch Manager Name" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div>
+                <label for="branchName" class="block text-sm font-semibold text-gray-700 mb-1">Branch Name</label>
+                <input type="text" id="branchName" placeholder="Enter Branch Name" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div>
+                <label for="clusterName" class="block text-sm font-semibold text-gray-700 mb-1">Cluster Name</label>
+                <input type="text" id="clusterName" placeholder="Enter Cluster Name" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div>
+                <label for="premium" class="block text-sm font-semibold text-gray-700 mb-1">Premium Amount</label>
+                <input type="text" id="premium" placeholder="Enter Premium Amount" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div>
+                <label for="productType" class="block text-sm font-semibold text-gray-700 mb-1">Product Type</label>
+                <input type="text" id="productType" placeholder="Enter Product Type" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <div>
+                <label for="clusterHead" class="block text-sm font-semibold text-gray-700 mb-1">Cluster Head Name</label>
+                <input type="text" id="clusterHead" placeholder="Enter Cluster Head Name" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <!-- Generate Button -->
+            <button type="submit" id="generateBtn" class="bg-blue-600 text-white font-bold py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">Generate Poster</button>
+        </form>
+
+        <!-- Container for the generated poster and download link -->
+        <div id="posterContainer" class="flex flex-col items-center gap-4">
+            <canvas id="posterCanvas" width="1080" height="1080"></canvas>
+            <button id="downloadBtn" class="bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-green-700 transition duration-300">Download Poster</button>
+        </div>
+        
+    </div>
+
+    <script>
+        // Get all necessary elements from the DOM
+        const posterForm = document.getElementById('posterForm');
+        const posterCanvas = document.getElementById('posterCanvas');
+        const ctx = posterCanvas.getContext('2d');
+        const downloadBtn = document.getElementById('downloadBtn');
+        
+        // Define the logo URLs
+        const logoUrlAB = './assets/aditya-birla-logo.png';
+        const logoUrlHDFC = './assets/hdfc-logo.png'; // Updated to a local path
+
+        posterForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const rmPhotoInput = document.getElementById('rmPhoto');
+            const file = rmPhotoInput.files[0];
+            
+            if (!file) {
+                showMessage("Please upload an RM photo.");
+                return;
+            }
+
+            const data = {
+                rmName: document.getElementById('rmName').value,
+                bmName: document.getElementById('bmName').value,
+                branchName: document.getElementById('branchName').value,
+                clusterName: document.getElementById('clusterName').value,
+                premium: document.getElementById('premium').value,
+                productType: document.getElementById('productType').value,
+                clusterHead: document.getElementById('clusterHead').value
+            };
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const rmImage = new Image();
+                rmImage.src = event.target.result;
+
+                const logoAB = new Image();
+                logoAB.src = logoUrlAB;
+
+                const logoHDFC = new Image();
+                logoHDFC.src = logoUrlHDFC;
+                
+                let loadedCount = 0;
+                const totalToLoad = 3; // Now we have 3 images to load
+                
+                const checkIfLoaded = () => {
+                    loadedCount++;
+                    if (loadedCount === totalToLoad) {
+                        drawPoster(rmImage, logoAB, logoHDFC, data);
+                    }
+                };
+
+                rmImage.onload = checkIfLoaded;
+                logoAB.onload = checkIfLoaded;
+                logoHDFC.onload = checkIfLoaded;
+                
+                rmImage.onerror = () => {
+                    console.error("RM image failed to load. Proceeding without logo.");
+                    checkIfLoaded();
+                };
+
+                logoAB.onerror = () => {
+                    console.error("Aditya Birla logo failed to load. Proceeding without logo.");
+                    logoAB.src = ''; // Clear source to prevent retries
+                    checkIfLoaded();
+                };
+
+                logoHDFC.onerror = () => {
+                    console.error("HDFC logo failed to load. Proceeding without logo.");
+                    logoHDFC.src = ''; // Clear source to prevent retries
+                    checkIfLoaded();
+                };
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Custom message box function to avoid alert()
+        function showMessage(message) {
+            const container = document.querySelector('.container');
+            let messageBox = document.getElementById('messageBox');
+            if (!messageBox) {
+                messageBox = document.createElement('div');
+                messageBox.id = 'messageBox';
+                messageBox.className = 'fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 z-50';
+                messageBox.innerHTML = `
+                    <div class="bg-white p-6 rounded-lg shadow-xl text-center flex flex-col items-center gap-4">
+                        <p class="text-lg font-semibold text-gray-800">${message}</p>
+                        <button onclick="this.parentNode.parentNode.style.display='none'" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700">OK</button>
+                    </div>
+                `;
+                document.body.appendChild(messageBox);
+            } else {
+                messageBox.querySelector('p').textContent = message;
+                messageBox.style.display = 'flex';
+            }
+        }
+
+        function drawPoster(rmImage, logoAB, logoHDFC, data) {
+            // Set canvas dimensions
+            const canvasWidth = 1080;
+            const canvasHeight = 1080;
+            posterCanvas.width = canvasWidth;
+            posterCanvas.height = canvasHeight;
+            
+            // --- Drawing the Poster ---
+            
+            // 1. Background
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+            // 2. Draw the Aditya Birla Health Insurance logo
+            const logoMargin = 50;
+            const logoWidth = 250; 
+            const logoHeightAB = logoAB.complete && logoAB.naturalWidth > 0 ? (logoAB.naturalHeight / logoAB.naturalWidth) * logoWidth : 0;
+            const logoYAB = logoMargin;
+            const logoXAB = canvasWidth - logoWidth - logoMargin;
+            if (logoHeightAB > 0) {
+                ctx.drawImage(logoAB, logoXAB, logoYAB, logoWidth, logoHeightAB);
+            }
+
+            // 3. Draw the HDFC logo
+            const logoHDFCWidth = 250; 
+            const logoHDFCHeight = logoHDFC.complete && logoHDFC.naturalWidth > 0 ? (logoHDFC.naturalHeight / logoHDFC.naturalWidth) * logoHDFCWidth : 0;
+            const logoYHDFC = logoMargin;
+            const logoXHDFC = logoMargin;
+            if (logoHDFCHeight > 0) {
+                ctx.drawImage(logoHDFC, logoXHDFC, logoYHDFC, logoHDFCWidth, logoHDFCHeight);
+            }
+
+
+            // Main Title
+            const titleY = 220; 
+            ctx.fillStyle = '#1e3a8a'; 
+            ctx.font = 'bold 60px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText("Aditya Birla's", canvasWidth / 2, titleY);
+            ctx.font = 'bold 70px Inter, sans-serif';
+            const preferredRmY = titleY + 90;
+            ctx.fillText("Preferred RM", canvasWidth / 2, preferredRmY);
+            
+            // Draw the RM Image (circular)
+            const imageSize = 300; 
+            const centerX = canvasWidth / 2;
+            const centerY = preferredRmY + 180; 
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, imageSize / 2, 0, Math.PI * 2);
+            ctx.closePath();
+            ctx.clip();
+            ctx.drawImage(rmImage, centerX - imageSize / 2, centerY - imageSize / 2, imageSize, imageSize);
+            ctx.restore();
+
+            // Add the circle border
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, imageSize / 2, 0, Math.PI * 2);
+            ctx.lineWidth = 15;
+            ctx.strokeStyle = '#facc15'; 
+            ctx.stroke();
+            
+            // Drawing the details text, centered and bold
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#333333';
+            ctx.font = 'bold 30px Inter, sans-serif';
+            let currentY = centerY + imageSize / 2 + 50;
+            const lineHeight = 45;
+            
+            ctx.fillText(`RM Name : ${data.rmName}`, canvasWidth / 2, currentY);
+            currentY += lineHeight;
+            ctx.fillText(`Branch Manager Name : ${data.bmName}`, canvasWidth / 2, currentY);
+            currentY += lineHeight;
+            ctx.fillText(`Branch Name : ${data.branchName}`, canvasWidth / 2, currentY);
+            currentY += lineHeight;
+            ctx.fillText(`Cluster : ${data.clusterName}`, canvasWidth / 2, currentY);
+            currentY += lineHeight + 10;
+
+            // The "Premium" line - with a background box and rounded corners
+            const premiumText = `Premium : ${data.premium}`;
+            ctx.font = 'bold 40px Inter, sans-serif';
+            const premiumTextMetrics = ctx.measureText(premiumText);
+            const premiumTextWidth = premiumTextMetrics.width;
+            
+            ctx.fillStyle = '#f3f4f6';
+            const paddingX = 20;
+            const boxWidth = premiumTextWidth + (paddingX * 2);
+            const boxHeight = 50;
+            const boxX = (canvasWidth / 2) - (boxWidth / 2);
+            const boxY = currentY - 40;
+
+            ctx.beginPath();
+            ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 10);
+            ctx.fill();
+            
+            ctx.fillStyle = '#facc15';
+            ctx.fillText(premiumText, canvasWidth / 2, currentY);
+            currentY += lineHeight + 10;
+
+            // Product Type
+            ctx.font = 'bold 30px Inter, sans-serif';
+            ctx.fillStyle = '#333333';
+            ctx.fillText(`Product Type : ${data.productType}`, canvasWidth / 2, currentY);
+            currentY += lineHeight + 50;
+
+            // Ending line
+            ctx.textAlign = 'center';
+            ctx.font = 'bold 30px Inter, sans-serif';
+            ctx.fillStyle = '#333333';
+            ctx.fillText(`Under Dynamic Leadership of ${data.clusterHead} Sir/ Ma'am`, canvasWidth / 2, currentY);
+
+            // Show the canvas and download link
+            posterCanvas.style.display = 'block';
+            downloadBtn.style.display = 'block';
+            posterForm.style.display = 'none';
+        }
+
+        downloadBtn.addEventListener('click', function() {
+            const imageDataUrl = posterCanvas.toDataURL('image/png');
+            const downloadLink = document.createElement('a');
+            downloadLink.href = imageDataUrl;
+            downloadLink.download = `aditya-birla-poster.png`;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        });
+    </script>
+</body>
+</html>
