@@ -96,7 +96,7 @@
     </div>
     
     <div class="version-number">
-        Version 1.4
+        Version 1.5
     </div>
 
     <script>
@@ -200,27 +200,27 @@
         function drawPoster(rmImage, logoAB, logoHDFC, data) {
             // Set canvas dimensions
             const canvasWidth = 1080;
-            const canvasHeight = 1350; // Increased height for a poster feel
+            const canvasHeight = 1350;
             posterCanvas.width = canvasWidth;
             posterCanvas.height = canvasHeight;
 
             // 1. Background Gradient
             const gradient = ctx.createLinearGradient(0, 0, 0, canvasHeight);
-            gradient.addColorStop(0, '#e8eff5'); // A very light, formal blue
-            gradient.addColorStop(0.2, '#f5f8fa'); // Lighter shade
-            gradient.addColorStop(1, '#ffffff'); // White at the bottom
+            gradient.addColorStop(0, '#e8eff5');
+            gradient.addColorStop(0.2, '#f5f8fa');
+            gradient.addColorStop(1, '#ffffff');
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
             // 2. Logos (Updated placement and size)
             const logoMargin = 60;
-            const hdfcLogoWidth = 350; // Larger HDFC logo
+            const hdfcLogoWidth = 350;
             const hdfcLogoHeight = (logoHDFC.complete && logoHDFC.naturalWidth > 0) ? (logoHDFC.naturalHeight / logoHDFC.naturalWidth) * hdfcLogoWidth : 0;
             if (hdfcLogoHeight > 0) {
                 ctx.drawImage(logoHDFC, logoMargin, logoMargin, hdfcLogoWidth, hdfcLogoHeight);
             }
 
-            const abLogoWidth = 280; // Slightly smaller Aditya Birla logo
+            const abLogoWidth = 280;
             const abLogoHeight = (logoAB.complete && logoAB.naturalWidth > 0) ? (logoAB.naturalHeight / logoAB.naturalWidth) * abLogoWidth : 0;
             if (abLogoHeight > 0) {
                 ctx.drawImage(logoAB, canvasWidth - abLogoWidth - logoMargin, logoMargin, abLogoWidth, abLogoHeight);
@@ -228,15 +228,15 @@
 
             // 3. Main Titles
             ctx.textAlign = 'center';
-            ctx.fillStyle = '#C20000'; // Bright Red for a bold "Congratulations"
+            ctx.fillStyle = '#C20000';
             ctx.font = 'bolder 90px Inter, sans-serif';
             ctx.fillText("Congratulations!", canvasWidth / 2, 280);
 
-            ctx.fillStyle = '#1a3263'; // Darker, formal blue
+            ctx.fillStyle = '#1a3263';
             ctx.font = 'bold 50px Inter, sans-serif';
             ctx.fillText("Aditya Birla’s Preferred RM", canvasWidth / 2, 360);
 
-            // 4. RM Image (Circular)
+            // 4. RM Image (Circular with cropping and shadow)
             const imageSize = 380;
             const centerX = canvasWidth / 2;
             const centerY = 360 + 250;
@@ -249,39 +249,48 @@
             ctx.shadowBlur = 20;
             ctx.shadowOffsetX = 0;
             ctx.shadowOffsetY = 15;
-            ctx.fillStyle = '#ffffff'; // A temporary color for the shadow shape
+            ctx.fillStyle = '#ffffff';
             ctx.fill();
-            ctx.restore(); // Reset shadow properties
+            ctx.restore();
 
-            // Now, draw the actual image
+            // Calculate source coordinates for square cropping
+            let sourceX = 0;
+            let sourceY = 0;
+            let sourceSize = Math.min(rmImage.width, rmImage.height);
+            if (rmImage.width > rmImage.height) {
+                sourceX = (rmImage.width - sourceSize) / 2;
+            } else {
+                sourceY = (rmImage.height - sourceSize) / 2;
+            }
+
+            // Now, draw the cropped and clipped image
             ctx.save();
             ctx.beginPath();
             ctx.arc(centerX, centerY, imageSize / 2, 0, Math.PI * 2);
             ctx.closePath();
             ctx.clip();
-            ctx.drawImage(rmImage, centerX - imageSize / 2, centerY - imageSize / 2, imageSize, imageSize);
+            ctx.drawImage(rmImage, sourceX, sourceY, sourceSize, sourceSize, centerX - imageSize / 2, centerY - imageSize / 2, imageSize, imageSize);
             ctx.restore();
 
             // 5. Gold Circle Border
             ctx.beginPath();
             ctx.arc(centerX, centerY, imageSize / 2, 0, Math.PI * 2);
             ctx.lineWidth = 18;
-            ctx.strokeStyle = '#FFC423'; // A brighter, more formal gold/yellow
+            ctx.strokeStyle = '#FFC423';
             ctx.stroke();
 
             // 6. Drawing the details text, grouped for better flow
             ctx.textAlign = 'center';
             let currentY = centerY + imageSize / 2 + 80;
-            const lineHeight = 60; // Increased line height
-
+            
             // Group 1: RM and BM Info
-            ctx.fillStyle = '#1a3263'; // Dark blue for the bold name
-            ctx.font = 'bold 40px Inter, sans-serif'; // Bigger font
+            ctx.fillStyle = '#1a3263';
+            ctx.font = 'bold 44px Inter, sans-serif'; // Even bigger font
             ctx.fillText(`${data.rmName}`, canvasWidth / 2, currentY);
             
-            ctx.fillStyle = '#4a5568'; // A softer gray for body text
+            ctx.fillStyle = '#4a5568';
             ctx.font = '28px Inter, sans-serif';
-            currentY += 45; // Increased space to make the name stand out
+            currentY += 45;
             ctx.fillText(`(RM)`, canvasWidth / 2, currentY);
             currentY += 70;
 
@@ -292,7 +301,7 @@
             currentY += 90;
             
             // Group 2: Premium with background box
-            const premiumText = `${data.premium}`;
+            const premiumText = `Premium : ${data.premium}`;
             ctx.font = 'bold 60px Inter, sans-serif';
             const premiumTextMetrics = ctx.measureText(premiumText);
             const premiumTextWidth = premiumTextMetrics.width;
@@ -302,12 +311,12 @@
             const boxX = (canvasWidth / 2) - (boxWidth / 2);
             const boxY = currentY - 70;
 
-            ctx.fillStyle = '#fef3e3'; // A formal, very light cream
+            ctx.fillStyle = '#fef3e3';
             ctx.beginPath();
             ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 15);
             ctx.fill();
 
-            ctx.fillStyle = '#FFC423'; // Bright gold
+            ctx.fillStyle = '#FFC423';
             ctx.fillText(premiumText, canvasWidth / 2, currentY);
             currentY += 70;
             
@@ -315,7 +324,7 @@
             ctx.fillStyle = '#4a5568';
             ctx.font = '32px Inter, sans-serif';
             ctx.fillText(`Product Type: ${data.productType}`, canvasWidth / 2, currentY);
-            currentY += 60; // Reduced gap for a more compact look
+            currentY += 60;
 
             ctx.font = '32px Inter, sans-serif';
             ctx.fillText(`Under the Dynamic Leadership of`, canvasWidth / 2, currentY);
