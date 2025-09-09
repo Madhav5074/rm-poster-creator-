@@ -210,7 +210,7 @@
 
             ctx.fillStyle = '#1a3263'; // Darker, formal blue
             ctx.font = 'bold 50px Inter, sans-serif';
-            ctx.fillText("Top Performer of the Month", canvasWidth / 2, 360);
+            ctx.fillText("Aditya Birla's Preferred RM", canvasWidth / 2, 360);
 
             // 4. RM Image (Circular)
             const imageSize = 380;
@@ -289,7 +289,8 @@
             ctx.fillStyle = '#4a5568';
             ctx.font = '32px Inter, sans-serif';
             ctx.fillText(`Product Type: ${data.productType}`, canvasWidth / 2, currentY);
-            currentY += 100;
+            
+            currentY += 70; // Reduced gap here from 100 to 70
 
             ctx.font = '32px Inter, sans-serif';
             ctx.fillText(`Under the Dynamic Leadership of`, canvasWidth / 2, currentY);
