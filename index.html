@@ -100,7 +100,7 @@
     </div>
     
     <div class="version-number">
-        Version 1.7
+        Version 1.8
     </div>
 
     <script>
@@ -225,7 +225,7 @@
             }
 
             const abLogoWidth = 280;
-            const abLogoHeight = (logoAB.complete && logoAB.naturalWidth > 0) ? (logoAB.naturalHeight / logoAB.naturalWidth) * abLogoWidth : 0;
+            const abLogoHeight = (logoAB.complete && logoAB.naturalWidth > 0) ? (logoAB.naturalHeight / abLogoWidth) * abLogoWidth : 0; // Fixed calculation
             if (abLogoHeight > 0) {
                 ctx.drawImage(logoAB, canvasWidth - abLogoWidth - logoMargin, logoMargin, abLogoWidth, abLogoHeight);
             }
@@ -289,14 +289,14 @@
             
             // Group 1: RM and BM Info
             ctx.fillStyle = '#1a3263';
-            ctx.font = 'bold 48px Inter, sans-serif'; // Bigger font
+            ctx.font = 'bold 52px Inter, sans-serif'; // Even bigger font
             ctx.fillText(`${data.rmName}`, canvasWidth / 2, currentY);
             
             ctx.fillStyle = '#4a5568';
             ctx.font = '28px Inter, sans-serif';
-            currentY += 45; // Reduced spacing
+            currentY += 40; // Reduced spacing
             ctx.fillText(`(RM)`, canvasWidth / 2, currentY);
-            currentY += 60; // Reduced spacing
+            currentY += 50; // Further reduced spacing
 
             ctx.font = 'bold 32px Inter, sans-serif';
             ctx.fillText(`Branch Manager: ${data.bmName}`, canvasWidth / 2, currentY);
@@ -315,8 +315,8 @@
             const boxX = (canvasWidth / 2) - (boxWidth / 2);
             const boxY = currentY - 70;
 
-            // Draw the box background
-            ctx.fillStyle = '#fef3e3';
+            // Draw the box background (Light Red)
+            ctx.fillStyle = '#FFDCDC'; // Light Red
             ctx.beginPath();
             ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 15);
             ctx.fill();
@@ -326,8 +326,8 @@
             ctx.lineWidth = 2;
             ctx.stroke();
             
-            // Draw the premium text
-            ctx.fillStyle = '#FFC423';
+            // Draw the premium text (Bright Red)
+            ctx.fillStyle = '#E70000'; // Bright Red
             ctx.fillText(premiumText, canvasWidth / 2, currentY);
             currentY += 70;
             
