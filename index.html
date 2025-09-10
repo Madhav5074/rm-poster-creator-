@@ -19,11 +19,11 @@
             border: 2px solid #e2e8f0;
             border-radius: 1.5rem;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            width: 100%; /* Make canvas responsive to screen width */
-            height: auto; /* Maintain aspect ratio */
-            max-width: 1080px; /* Limit max size */
+            width: 100%;
+            height: auto;
+            max-width: 1080px;
         }
-        #posterCanvas, #downloadBtn {
+        #posterCanvas, #downloadBtn, #loadingIndicator {
             display: none;
         }
         .version-number {
@@ -39,6 +39,22 @@
             left: 1rem;
             font-size: 0.875rem;
             color: #9ca3af;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #0c4a6e;
+            animation: spin 1s ease infinite;
+        }
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
@@ -110,6 +126,11 @@
             <button type="submit" id="generateBtn" class="bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-3 rounded-lg shadow-lg hover:from-blue-700 hover:to-blue-900 transition duration-300 transform hover:scale-105">Generate Poster</button>
         </form>
 
+        <div id="loadingIndicator" class="flex flex-col items-center gap-4">
+            <div class="spinner"></div>
+            <p class="text-gray-700 font-semibold">Generating...</p>
+        </div>
+
         <div id="posterContainer" class="flex flex-col items-center gap-6">
             <canvas id="posterCanvas" width="1080" height="1350"></canvas>
             <button id="downloadBtn" class="bg-gradient-to-r from-green-600 to-green-800 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:from-green-700 hover:to-green-900 transition duration-300 transform hover:scale-105">Download Poster</button>
@@ -118,7 +139,7 @@
     </div>
     
     <div class="version-number">
-        Version 2.5
+        Version 2.6
     </div>
     <div class="copyright-text">
         Copyright © MADHAV KALRA
@@ -129,6 +150,7 @@
         const posterCanvas = document.getElementById('posterCanvas');
         const ctx = posterCanvas.getContext('2d');
         const downloadBtn = document.getElementById('downloadBtn');
+        const loadingIndicator = document.getElementById('loadingIndicator');
         const premiumInput = document.getElementById('premium');
         
         const logoUrlAB = './assets/aditya-birla-logo.PNG';
@@ -153,6 +175,10 @@
                 showMessage("Please upload an RM photo.");
                 return;
             }
+
+            // Show loading animation and hide form
+            posterForm.style.display = 'none';
+            loadingIndicator.style.display = 'flex';
 
             const data = {
                 rmName: document.getElementById('rmName').value,
@@ -183,6 +209,10 @@
                     loadedCount++;
                     if (loadedCount === totalToLoad) {
                         drawPoster(rmImage, logoAB, logoHDFC, data);
+                        // Hide loading and show poster
+                        loadingIndicator.style.display = 'none';
+                        posterCanvas.style.display = 'block';
+                        downloadBtn.style.display = 'block';
                     }
                 };
 
@@ -349,10 +379,6 @@
             currentY += 45;
             ctx.font = 'bold 36px Inter, sans-serif';
             ctx.fillText(`${data.clusterHeadTitle} ${data.clusterHead}`, canvasWidth / 2, currentY);
-
-            posterCanvas.style.display = 'block';
-            downloadBtn.style.display = 'block';
-            posterForm.style.display = 'none';
         }
 
         downloadBtn.addEventListener('click', function() {
