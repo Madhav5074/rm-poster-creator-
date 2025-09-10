@@ -30,6 +30,13 @@
             font-size: 0.875rem;
             color: #9ca3af;
         }
+        .copyright-text {
+            position: fixed;
+            bottom: 1rem;
+            left: 1rem;
+            font-size: 0.875rem;
+            color: #9ca3af;
+        }
     </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-6">
@@ -108,7 +115,10 @@
     </div>
     
     <div class="version-number">
-        Version 2.3
+        Version 2.4
+    </div>
+    <div class="copyright-text">
+        COPYRIGHT © ALL RIGHTS RESERVED BY MADHAV KALRA
     </div>
 
     <script>
@@ -118,7 +128,6 @@
         const downloadBtn = document.getElementById('downloadBtn');
         const premiumInput = document.getElementById('premium');
         
-        // Corrected file names with uppercase .PNG extension
         const logoUrlAB = './assets/aditya-birla-logo.PNG';
         const logoUrlHDFC = './assets/hdfc-logo.PNG';
 
@@ -220,7 +229,6 @@
 
             const logoMargin = 60;
             
-            // Increased logo size
             const hdfcLogoDesiredWidth = 280;
             let hdfcLogoActualHeight = 0;
             if (logoHDFC.complete && logoHDFC.naturalWidth > 0) {
@@ -236,7 +244,8 @@
                 abLogoActualHeight = (logoAB.naturalHeight / logoAB.naturalWidth) * abLogoDesiredWidth;
             }
             if (abLogoActualHeight > 0) {
-                ctx.drawImage(logoAB, canvasWidth - abLogoDesiredWidth - logoMargin, logoMargin, abLogoDesiredWidth, abLogoActualHeight);
+                // Adjusted Y position for Aditya Birla logo
+                ctx.drawImage(logoAB, canvasWidth - abLogoDesiredWidth - logoMargin, logoMargin - 15, abLogoDesiredWidth, abLogoActualHeight);
             }
 
             ctx.textAlign = 'center';
