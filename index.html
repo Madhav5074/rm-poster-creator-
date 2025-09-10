@@ -139,7 +139,7 @@
     </div>
     
     <div class="version-number">
-        Version 2.6
+        Version 2.7
     </div>
     <div class="copyright-text">
         Copyright © MADHAV KALRA
@@ -176,7 +176,6 @@
                 return;
             }
 
-            // Show loading animation and hide form
             posterForm.style.display = 'none';
             loadingIndicator.style.display = 'flex';
 
@@ -209,7 +208,6 @@
                     loadedCount++;
                     if (loadedCount === totalToLoad) {
                         drawPoster(rmImage, logoAB, logoHDFC, data);
-                        // Hide loading and show poster
                         loadingIndicator.style.display = 'none';
                         posterCanvas.style.display = 'block';
                         downloadBtn.style.display = 'block';
@@ -287,7 +285,8 @@
 
             ctx.fillStyle = '#1a3263';
             ctx.font = 'bold 50px Inter, sans-serif';
-            ctx.fillText("Aditya Birla’s Preferred RM", canvasWidth / 2, 360);
+            // Updated text here
+            ctx.fillText("Fresh Health Champ (ABHI)", canvasWidth / 2, 360);
 
             const imageSize = 380;
             const centerX = canvasWidth / 2;
