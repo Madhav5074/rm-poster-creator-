@@ -108,7 +108,7 @@
     </div>
     
     <div class="version-number">
-        Version 2.2
+        Version 2.3
     </div>
 
     <script>
@@ -118,8 +118,8 @@
         const downloadBtn = document.getElementById('downloadBtn');
         const premiumInput = document.getElementById('premium');
         
-        const logoUrlAB = './assets/aditya-birla-logo.PNG';
-        const logoUrlHDFC = './assets/hdfc-logo.PNG';
+        const logoUrlAB = './assets/aditya-birla-logo.png';
+        const logoUrlHDFC = './assets/hdfc-logo.png';
 
         premiumInput.addEventListener('input', function(event) {
             const value = this.value.replace(/[^0-9]/g, '');
@@ -219,7 +219,7 @@
 
             const logoMargin = 60;
             
-            const hdfcLogoDesiredWidth = 250;
+            const hdfcLogoDesiredWidth = 280; // Slightly bigger
             let hdfcLogoActualHeight = 0;
             if (logoHDFC.complete && logoHDFC.naturalWidth > 0) {
                 hdfcLogoActualHeight = (logoHDFC.naturalHeight / logoHDFC.naturalWidth) * hdfcLogoDesiredWidth;
@@ -228,7 +228,7 @@
                 ctx.drawImage(logoHDFC, logoMargin, logoMargin, hdfcLogoDesiredWidth, hdfcLogoActualHeight);
             }
 
-            const abLogoDesiredWidth = 200;
+            const abLogoDesiredWidth = 230; // Slightly bigger
             let abLogoActualHeight = 0;
             if (logoAB.complete && logoAB.naturalWidth > 0) {
                 abLogoActualHeight = (logoAB.naturalHeight / logoAB.naturalWidth) * abLogoDesiredWidth;
