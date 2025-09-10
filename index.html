@@ -19,6 +19,9 @@
             border: 2px solid #e2e8f0;
             border-radius: 1.5rem;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%; /* Make canvas responsive to screen width */
+            height: auto; /* Maintain aspect ratio */
+            max-width: 1080px; /* Limit max size */
         }
         #posterCanvas, #downloadBtn {
             display: none;
@@ -115,10 +118,10 @@
     </div>
     
     <div class="version-number">
-        Version 2.4
+        Version 2.5
     </div>
     <div class="copyright-text">
-        COPYRIGHT © ALL RIGHTS RESERVED BY MADHAV KALRA
+        Copyright © MADHAV KALRA
     </div>
 
     <script>
@@ -244,7 +247,6 @@
                 abLogoActualHeight = (logoAB.naturalHeight / logoAB.naturalWidth) * abLogoDesiredWidth;
             }
             if (abLogoActualHeight > 0) {
-                // Adjusted Y position for Aditya Birla logo
                 ctx.drawImage(logoAB, canvasWidth - abLogoDesiredWidth - logoMargin, logoMargin - 15, abLogoDesiredWidth, abLogoActualHeight);
             }
 
