@@ -139,7 +139,7 @@
     </div>
     
     <div class="version-number">
-        Version 2.8
+        Version 2.9
     </div>
     <div class="copyright-text">
         Copyright © MADHAV KALRA
@@ -373,11 +373,10 @@
             ctx.font = 'bold 52px Inter, sans-serif';
             ctx.fillText(`${data.rmName}`, canvasWidth / 2, currentY);
             
-            ctx.fillStyle = '#4a5568';
-            ctx.font = '28px Inter, sans-serif';
-            currentY += 40;
-            ctx.fillText(`(RM)`, canvasWidth / 2, currentY);
-            currentY += 50;
+            // Removed the (RM) text here
+            // currentY += 40; 
+            // ctx.fillText(`(RM)`, canvasWidth / 2, currentY);
+            currentY += 50; // Adjust Y position to account for removed line
 
             ctx.font = 'bold 32px Inter, sans-serif';
             ctx.fillText(`Branch Manager: ${data.bmName}`, canvasWidth / 2, currentY);
