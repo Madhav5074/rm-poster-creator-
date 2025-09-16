@@ -139,20 +139,6 @@
                 </select>
             </div>
             
-            <div>
-                <label for="clusterHeadTitle" class="block text-sm font-semibold text-gray-700 mb-1">Cluster Head Title</label>
-                <select id="clusterHeadTitle" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="" disabled selected>Select Title</option>
-                    <option value="Mr.">Mr.</option>
-                    <option value="Mrs.">Mrs.</option>
-                    <option value="Ms.">Ms.</option>
-                </select>
-            </div>
-            <div>
-                <label for="clusterHead" class="block text-sm font-semibold text-gray-700 mb-1">Cluster Head Name</label>
-                <input type="text" id="clusterHead" placeholder="Enter Cluster Head Name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-
             <button type="submit" id="generateBtn" class="bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-3 rounded-lg shadow-lg hover:from-blue-700 hover:to-blue-900 transition duration-300 transform hover:scale-105">Generate Poster</button>
         </form>
 
@@ -237,14 +223,12 @@
                 rmName: document.getElementById('rmName').value,
                 rmDesignation: rmDesignation,
                 policyType: document.getElementById('policyType').value,
-                isBbhQualified: bbhQualificationCheckbox.checked, // Added new field
+                isBbhQualified: bbhQualificationCheckbox.checked,
                 bmName: document.getElementById('bmName').value,
                 branchName: document.getElementById('branchName').value,
                 clusterName: document.getElementById('clusterName').value,
                 premium: document.getElementById('premium').value,
-                productType: document.getElementById('productType').value,
-                clusterHeadTitle: document.getElementById('clusterHeadTitle').value,
-                clusterHead: document.getElementById('clusterHead').value
+                productType: document.getElementById('productType').value
             };
 
             const reader = new FileReader();
@@ -284,22 +268,16 @@
 
         function showMessage(message) {
             const container = document.querySelector('.container');
-            let messageBox = document.getElementById('messageBox');
-            if (!messageBox) {
-                messageBox = document.createElement('div');
-                messageBox.id = 'messageBox';
-                messageBox.className = 'fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 z-50';
-                messageBox.innerHTML = `
-                    <div class="bg-white p-6 rounded-lg shadow-xl text-center flex flex-col items-center gap-4">
-                        <p class="text-lg font-semibold text-gray-800">${message}</p>
-                        <button onclick="this.parentNode.parentNode.style.display='none'" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700">OK</button>
-                    </div>
-                `;
-                document.body.appendChild(messageBox);
-            } else {
-                messageBox.querySelector('p').textContent = message;
-                messageBox.style.display = 'flex';
-            }
+            let messageBox = document.createElement('div');
+            messageBox.id = 'messageBox';
+            messageBox.className = 'fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 z-50';
+            messageBox.innerHTML = `
+                <div class="bg-white p-6 rounded-lg shadow-xl text-center flex flex-col items-center gap-4">
+                    <p class="text-lg font-semibold text-gray-800">${message}</p>
+                    <button onclick="this.parentNode.parentNode.style.display='none'" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700">OK</button>
+                </div>
+            `;
+            document.body.appendChild(messageBox);
         }
 
         function drawStar(ctx, cx, cy, spikes, outerRadius, innerRadius, color) {
@@ -443,9 +421,11 @@
             
             currentY += 50;
 
+            // Removed BM Name from here
+            // ctx.font = 'bold 32px Inter, sans-serif';
+            // ctx.fillText(`Branch Manager: ${data.bmName}`, canvasWidth / 2, currentY);
+            // currentY += 45;
             ctx.font = 'bold 32px Inter, sans-serif';
-            ctx.fillText(`Branch Manager: ${data.bmName}`, canvasWidth / 2, currentY);
-            currentY += 45;
             ctx.fillText(`Branch: ${data.branchName} | Cluster: ${data.clusterName}`, canvasWidth / 2, currentY);
             currentY += 90;
             
@@ -477,11 +457,12 @@
             ctx.fillText(`Product Type: ${data.productType}`, canvasWidth / 2, currentY);
             currentY += 60;
 
+            // Updated line to show BM name at the bottom
             ctx.font = '32px Inter, sans-serif';
-            ctx.fillText(`Under the Dynamic Leadership of`, canvasWidth / 2, currentY);
+            ctx.fillText(`Special thanks to Branch Manager`, canvasWidth / 2, currentY);
             currentY += 45;
             ctx.font = 'bold 36px Inter, sans-serif';
-            ctx.fillText(`${data.clusterHeadTitle} ${data.clusterHead}`, canvasWidth / 2, currentY);
+            ctx.fillText(`${data.bmName}`, canvasWidth / 2, currentY);
         }
 
         downloadBtn.addEventListener('click', function() {
