@@ -79,6 +79,22 @@
                 <label for="rmName" class="block text-sm font-semibold text-gray-700 mb-1">RM Name</label>
                 <input type="text" id="rmName" placeholder="Enter RM Name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
+
+            <div>
+                <label for="rmDesignation" class="block text-sm font-semibold text-gray-700 mb-1">RM Designation</label>
+                <select id="rmDesignation" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="" disabled selected>Select Designation</option>
+                    <option value="RM">RM</option>
+                    <option value="PB">PB</option>
+                    <option value="PBA">PBA</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div id="otherDesignationContainer" style="display:none;">
+                <label for="otherDesignation" class="block text-sm font-semibold text-gray-700 mb-1">Specify Other Designation</label>
+                <input type="text" id="otherDesignation" placeholder="e.g., Senior Manager" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
             
             <div>
                 <label for="bmName" class="block text-sm font-semibold text-gray-700 mb-1">Branch Manager Name</label>
@@ -152,6 +168,9 @@
         const downloadBtn = document.getElementById('downloadBtn');
         const loadingIndicator = document.getElementById('loadingIndicator');
         const premiumInput = document.getElementById('premium');
+        const rmDesignationSelect = document.getElementById('rmDesignation');
+        const otherDesignationContainer = document.getElementById('otherDesignationContainer');
+        const otherDesignationInput = document.getElementById('otherDesignation');
         
         const logoUrlAB = './assets/aditya-birla-logo.PNG';
         const logoUrlHDFC = './assets/hdfc-logo.PNG';
@@ -162,6 +181,17 @@
                 this.value = `₹${Number(value).toLocaleString('en-IN')}`;
             } else {
                 this.value = '';
+            }
+        });
+
+        rmDesignationSelect.addEventListener('change', function() {
+            if (this.value === 'Other') {
+                otherDesignationContainer.style.display = 'block';
+                otherDesignationInput.setAttribute('required', 'required');
+            } else {
+                otherDesignationContainer.style.display = 'none';
+                otherDesignationInput.removeAttribute('required');
+                otherDesignationInput.value = ''; // Clear the input when "Other" is not selected
             }
         });
 
@@ -176,11 +206,22 @@
                 return;
             }
 
+            // Get the correct designation
+            let rmDesignation = rmDesignationSelect.value;
+            if (rmDesignation === 'Other') {
+                rmDesignation = otherDesignationInput.value;
+                if (!rmDesignation) {
+                    showMessage("Please specify the other designation.");
+                    return;
+                }
+            }
+            
             posterForm.style.display = 'none';
             loadingIndicator.style.display = 'flex';
 
             const data = {
                 rmName: document.getElementById('rmName').value,
+                rmDesignation: rmDesignation, // Added new field
                 bmName: document.getElementById('bmName').value,
                 branchName: document.getElementById('branchName').value,
                 clusterName: document.getElementById('clusterName').value,
@@ -372,11 +413,13 @@
             ctx.fillStyle = '#1a3263';
             ctx.font = 'bold 52px Inter, sans-serif';
             ctx.fillText(`${data.rmName}`, canvasWidth / 2, currentY);
+
+            // Draw the designation
+            currentY += 40;
+            ctx.font = 'bold 40px Inter, sans-serif';
+            ctx.fillText(`(${data.rmDesignation})`, canvasWidth / 2, currentY);
             
-            // Removed the (RM) text here
-            // currentY += 40; 
-            // ctx.fillText(`(RM)`, canvasWidth / 2, currentY);
-            currentY += 50; // Adjust Y position to account for removed line
+            currentY += 50; // Adjust Y position to account for the new line
 
             ctx.font = 'bold 32px Inter, sans-serif';
             ctx.fillText(`Branch Manager: ${data.bmName}`, canvasWidth / 2, currentY);
