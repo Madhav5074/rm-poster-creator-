@@ -414,17 +414,13 @@
             ctx.font = 'bold 52px Inter, sans-serif';
             ctx.fillText(`${data.rmName}`, canvasWidth / 2, currentY);
 
-            // Draw the designation
-            currentY += 40;
+            // Draw the designation with a slight gap
+            currentY += 50; // Increased this value for the gap
             ctx.font = 'bold 40px Inter, sans-serif';
             ctx.fillText(`(${data.rmDesignation})`, canvasWidth / 2, currentY);
             
-            currentY += 50;
+            currentY += 50; // Adjusted for the next line
 
-            // Removed BM Name from here
-            // ctx.font = 'bold 32px Inter, sans-serif';
-            // ctx.fillText(`Branch Manager: ${data.bmName}`, canvasWidth / 2, currentY);
-            // currentY += 45;
             ctx.font = 'bold 32px Inter, sans-serif';
             ctx.fillText(`Branch: ${data.branchName} | Cluster: ${data.clusterName}`, canvasWidth / 2, currentY);
             currentY += 90;
