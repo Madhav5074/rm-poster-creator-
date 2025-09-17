@@ -111,6 +111,16 @@
             </div>
 
             <div>
+                <label for="bmTitle" class="block text-sm font-semibold text-gray-700 mb-1">Branch Manager Title</label>
+                <select id="bmTitle" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="" disabled selected>Select Title</option>
+                    <option value="Mr.">Mr.</option>
+                    <option value="Mrs.">Mrs.</option>
+                    <option value="Ms.">Ms.</option>
+                </select>
+            </div>
+
+            <div>
                 <label for="bmName" class="block text-sm font-semibold text-gray-700 mb-1">Branch Manager Name</label>
                 <input type="text" id="bmName" placeholder="Enter Branch Manager Name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
@@ -224,6 +234,7 @@
                 rmDesignation: rmDesignation,
                 policyType: document.getElementById('policyType').value,
                 isBbhQualified: bbhQualificationCheckbox.checked,
+                bmTitle: document.getElementById('bmTitle').value,
                 bmName: document.getElementById('bmName').value,
                 branchName: document.getElementById('branchName').value,
                 clusterName: document.getElementById('clusterName').value,
@@ -415,11 +426,11 @@
             ctx.fillText(`${data.rmName}`, canvasWidth / 2, currentY);
 
             // Draw the designation with a slight gap
-            currentY += 50; // Increased this value for the gap
+            currentY += 50;
             ctx.font = 'bold 40px Inter, sans-serif';
             ctx.fillText(`(${data.rmDesignation})`, canvasWidth / 2, currentY);
             
-            currentY += 50; // Adjusted for the next line
+            currentY += 50;
 
             ctx.font = 'bold 32px Inter, sans-serif';
             ctx.fillText(`Branch: ${data.branchName} | Cluster: ${data.clusterName}`, canvasWidth / 2, currentY);
@@ -453,12 +464,12 @@
             ctx.fillText(`Product Type: ${data.productType}`, canvasWidth / 2, currentY);
             currentY += 60;
 
-            // Updated line to show BM name at the bottom
+            // Updated line to show BM name with title at the bottom
             ctx.font = '32px Inter, sans-serif';
             ctx.fillText(`Special thanks to Branch Manager`, canvasWidth / 2, currentY);
             currentY += 45;
             ctx.font = 'bold 36px Inter, sans-serif';
-            ctx.fillText(`${data.bmName}`, canvasWidth / 2, currentY);
+            ctx.fillText(`${data.bmTitle} ${data.bmName}`, canvasWidth / 2, currentY);
         }
 
         downloadBtn.addEventListener('click', function() {
