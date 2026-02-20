@@ -35,9 +35,9 @@
     </style>
 </head>
 
-<body class="flex items-center justify-center min-h-screen p-6">
+<body class="flex justify-center min-h-screen py-12 px-6 overflow-auto">
 
-    <div class="container bg-white p-8 rounded-3xl shadow-2xl">
+    <div class="container bg-white p-8 rounded-3xl shadow-2xl h-fit">
 
         <form id="posterForm" class="flex flex-col gap-5">
             <h1 class="text-3xl font-bold text-center text-blue-900 mb-2">
@@ -123,6 +123,9 @@
             <button id="downloadBtn" class="w-full bg-yellow-500 text-black p-3 rounded-lg font-bold hover:bg-yellow-600 transition shadow-lg">
                 Download Poster
             </button>
+            <button id="resetBtn" class="w-full bg-gray-200 text-gray-800 p-3 rounded-lg font-bold hover:bg-gray-300 transition">
+                Create Another
+            </button>
         </div>
 
     </div>
@@ -132,6 +135,7 @@
         const ctx = canvas.getContext("2d");
         const form = document.getElementById("posterForm");
         const downloadBtn = document.getElementById("downloadBtn");
+        const resetBtn = document.getElementById("resetBtn");
         const loadingIndicator = document.getElementById("loadingIndicator");
         const resultContainer = document.getElementById("resultContainer");
 
@@ -169,10 +173,19 @@
             }
         });
 
+        // Reset Form to create another one
+        resetBtn.addEventListener("click", function() {
+            resultContainer.classList.add("hidden");
+            resultContainer.classList.remove("flex");
+            form.classList.remove("hidden");
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
         // Helper function to load images safely
         const loadImage = (src) => {
             return new Promise((resolve) => {
                 const img = new Image();
+                img.crossOrigin = "anonymous";
                 img.onload = () => resolve(img);
                 img.onerror = () => resolve(null); // Return null if missing, prevents breaking
                 img.src = src;
@@ -190,6 +203,7 @@
             form.classList.add("hidden");
             loadingIndicator.classList.remove("hidden");
             loadingIndicator.classList.add("flex");
+            window.scrollTo({ top: 0, behavior: 'smooth' });
 
             const reader = new FileReader();
             reader.onload = async function(ev){
@@ -197,9 +211,14 @@
                 // Wait for all 3 images to load perfectly before drawing
                 const [profileImg, hdfcLogo, abLogo] = await Promise.all([
                     loadImage(ev.target.result),
-                    loadImage('./hdfc-logo.PNG'), // Fixed path
-                    loadImage('./aditya-birla-logo.PNG') // Fixed path
+                    loadImage('./hdfc-logo.PNG'), 
+                    loadImage('./aditya-birla-logo.PNG') 
                 ]);
+
+                // Check if logos loaded and warn the user if they didn't
+                if (!hdfcLogo || !abLogo) {
+                    alert("Warning: One or both logos did not load! Please ensure your image files are named EXACTLY 'hdfc-logo.PNG' and 'aditya-birla-logo.PNG'. Remember that GitHub is strictly case-sensitive (.png vs .PNG matters).");
+                }
 
                 let designation = rmDesignation.value === "Others" 
                     ? otherDesignation.value 
