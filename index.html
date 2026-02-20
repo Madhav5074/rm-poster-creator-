@@ -256,22 +256,20 @@
 
             /* --- Draw Golden Sparkles in Background --- */
             ctx.save();
-            // Seed randomness based on name to keep sparkles consistent per person (optional, but using basic random here)
             for (let i = 0; i < 80; i++) {
                 let x = Math.random() * 1080;
-                let y = 150 + Math.random() * 1200; // Keep sparkles below the white header
-                let radius = Math.random() * 3 + 1; // Size between 1px and 4px
-                let opacity = Math.random() * 0.8 + 0.2; // Opacity between 0.2 and 1.0
+                let y = 150 + Math.random() * 1200; 
+                let radius = Math.random() * 3 + 1; 
+                let opacity = Math.random() * 0.8 + 0.2; 
                 
                 ctx.beginPath();
                 ctx.arc(x, y, radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 215, 0, ${opacity})`; // Gold color
+                ctx.fillStyle = `rgba(255, 215, 0, ${opacity})`; 
                 ctx.shadowBlur = Math.random() * 10 + 5;
                 ctx.shadowColor = "white";
                 ctx.fill();
             }
             ctx.restore();
-            /* ------------------------------------------ */
 
             /* Top Header Bar */
             ctx.fillStyle = "#ffffff";
@@ -281,18 +279,18 @@
             if(hdfcLogo){
                 let width = 200;
                 let height = (hdfcLogo.naturalHeight / hdfcLogo.naturalWidth) * width;
-                let yPos = (150 - height) / 2; // Center vertically in the 150px header
+                let yPos = (150 - height) / 2; 
                 ctx.drawImage(hdfcLogo, 80, yPos, width, height);
             }
 
             if(abLogo){
                 let width = 200;
                 let height = (abLogo.naturalHeight / abLogo.naturalWidth) * width;
-                let yPos = (150 - height) / 2; // Center vertically in the 150px header
+                let yPos = (150 - height) / 2; 
                 ctx.drawImage(abLogo, 800, yPos, width, height);
             }
 
-            /* Gold Gradient */
+            /* Gold Gradient for text and frames */
             const gold = ctx.createLinearGradient(0,0,1080,0);
             gold.addColorStop(0,"#d4af37");
             gold.addColorStop(0.5,"#fff5b1");
@@ -330,7 +328,7 @@
                 ctx.restore();
             }
 
-            /* Gold Frame */
+            /* Gold Frame around Profile */
             ctx.lineWidth = 10;
             ctx.strokeStyle = gold;
             ctx.beginPath();
@@ -346,12 +344,12 @@
             ctx.font = "bold 34px Inter";
             ctx.fillText("(" + data.designation + ")", 540, 945);
 
-            /* Branch and Cluster (Font size increased to 32px) */
+            /* Branch and Cluster (Font size 32px) */
             ctx.fillStyle = "#ffffff";
             ctx.font = "32px Inter";
             ctx.fillText("Branch: " + data.branch + " | Cluster: " + data.cluster, 540, 1000);
 
-            /* Premium Plate (Shifted down slightly to accommodate bigger font above) */
+            /* Premium Plate plate */
             ctx.fillStyle = "rgba(255,255,255,0.08)";
             ctx.fillRect(280, 1040, 520, 110);
             ctx.strokeStyle = "rgba(255,215,0,0.5)";
@@ -362,10 +360,51 @@
             ctx.font = "bold 80px Inter";
             ctx.fillText(data.premium, 540, 1120);
 
-            /* Product (Font size increased to 32px) */
+            /* Product (Font size 32px) */
             ctx.fillStyle = "#ffffff";
             ctx.font = "32px Inter";
             ctx.fillText("Product: " + data.product, 540, 1210);
+
+
+            /* =========================================
+               STYLISH GOLDEN BORDERS (New Addition)
+            ========================================= */
+            ctx.save();
+
+            // 1. Create a Metallic Gold Gradient for the borders
+            // Using diagonal coordinates for a metallic sheen effect
+            const borderGold = ctx.createLinearGradient(0, 0, 1080, 1350);
+            borderGold.addColorStop(0, "#b8860b");   // Dark Goldenrod
+            borderGold.addColorStop(0.2, "#d4af37");  // Metallic Gold
+            borderGold.addColorStop(0.4, "#ffd700");  // Bright Gold
+            borderGold.addColorStop(0.6, "#fffacd");  // LemonChiffon highlight
+            borderGold.addColorStop(0.8, "#d4af37");  // Metallic GoldBack
+            borderGold.addColorStop(1, "#b8860b");    // Dark finish
+
+            // Add a golden glow shadow to the borders
+            ctx.shadowColor = "#d4af37";
+            ctx.shadowBlur = 20;
+            
+            ctx.strokeStyle = borderGold;
+
+            // 2. Draw Outer Thick Border (20px wide)
+            const outerBorderWidth = 20;
+            ctx.lineWidth = outerBorderWidth;
+            // Offset by half the width so the stroke doesn't get cut off by canvas edge
+            ctx.strokeRect(outerBorderWidth/2, outerBorderWidth/2, 1080 - outerBorderWidth, 1350 - outerBorderWidth);
+
+            // 3. Draw Inner Thin Border (4px wide) to create a double-frame look
+            const innerBorderWidth = 4;
+            const gap = 12; // Gap between outer and inner border
+            const offset = outerBorderWidth + gap;
+            
+            // Reduce shadow for inner border for cleaner look
+            ctx.shadowBlur = 5; 
+            ctx.lineWidth = innerBorderWidth;
+            ctx.strokeRect(offset + innerBorderWidth/2, offset + innerBorderWidth/2, 1080 - (offset*2) - innerBorderWidth, 1350 - (offset*2) - innerBorderWidth);
+
+            ctx.restore();
+            /* ========================================= */
         }
 
         downloadBtn.addEventListener("click", function(){
