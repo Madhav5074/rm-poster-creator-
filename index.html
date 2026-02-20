@@ -185,9 +185,9 @@
         const loadImage = (src) => {
             return new Promise((resolve) => {
                 const img = new Image();
-                img.crossOrigin = "anonymous";
+                // Removed crossOrigin for local testing compatibility
                 img.onload = () => resolve(img);
-                img.onerror = () => resolve(null); // Return null if missing, prevents breaking
+                img.onerror = () => resolve(null); 
                 img.src = src;
             });
         };
@@ -208,19 +208,16 @@
             const reader = new FileReader();
             reader.onload = async function(ev){
                 
-                // ADDED THE './assets/' PATH BACK IN HERE
                 const [profileImg, hdfcLogo, abLogo] = await Promise.all([
                     loadImage(ev.target.result),
                     loadImage('./assets/hdfc-logo.PNG'), 
                     loadImage('./assets/aditya-birla-logo.PNG') 
                 ]);
 
-                // Check if logos loaded and warn the user if they didn't
                 if (!hdfcLogo || !abLogo) {
                     let missing = [];
                     if(!hdfcLogo) missing.push("./assets/hdfc-logo.PNG");
                     if(!abLogo) missing.push("./assets/aditya-birla-logo.PNG");
-                    
                     alert("Missing files: " + missing.join(", ") + "\n\nPlease ensure these files exist in your 'assets' folder and the capitalization matches exactly (e.g., .png vs .PNG).");
                 }
 
@@ -258,8 +255,8 @@
             ctx.fillStyle = bg;
             ctx.fillRect(0,0,1080,1350);
 
-            /* Top Header Bar */
-            ctx.fillStyle = "rgba(255,255,255,0.05)";
+            /* Top Header Bar - CHANGED TO SOLID WHITE */
+            ctx.fillStyle = "#ffffff";
             ctx.fillRect(0,0,1080,150);
 
             /* Draw Logos Safely */
