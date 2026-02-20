@@ -1,3 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Champions Club Corporate</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body { font-family:'Inter', sans-serif; background:#eef2f7; }
+.container { max-width:550px; margin:auto; }
+canvas { border-radius:20px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.3); }
+</style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen p-6">
+
+<div class="container bg-white p-8 rounded-3xl shadow-2xl">
+
+<form id="posterForm" class="flex flex-col gap-4">
+
+<h1 class="text-3xl font-bold text-center text-blue-900">
+Champions Club – Corporate Edition
+</h1>
+
+<input type="file" id="rmPhoto" required class="border p-2 rounded">
+<input type="text" id="rmName" placeholder="RM Name" required class="border p-2 rounded">
+
+<select id="rmDesignation" required class="border p-2 rounded">
+<option value="" disabled selected>Select Designation</option>
+<option value="RM">RM</option>
+<option value="PB">PB</option>
+<option value="PBA">PBA</option>
+<option value="Others">Others</option>
+</select>
+
+<input type="text" id="otherDesignation" placeholder="Enter Designation"
+class="border p-2 rounded hidden">
+
+<select id="nliType" required class="border p-2 rounded">
+<option value="" disabled selected>Select Criteria</option>
+<option value="NLI + LI Met">NLI + LI Met</option>
+<option value="NLI Met">NLI Met</option>
+</select>
+
+<select id="clubLevel" required class="border p-2 rounded">
+<option value="" disabled selected>Select Level</option>
+<option value="Level 1">Level 1</option>
+<option value="Level 2">Level 2</option>
+</select>
+
+<input type="text" id="branchName" placeholder="Branch Name" required class="border p-2 rounded">
+<input type="text" id="clusterName" placeholder="Cluster Name" required class="border p-2 rounded">
+<input type="text" id="premium" placeholder="Premium Amount" required class="border p-2 rounded">
+<input type="text" id="productType" placeholder="Product Type" required class="border p-2 rounded">
+
+<button type="submit" class="bg-blue-900 text-white p-3 rounded font-bold">
+Generate Poster
+</button>
+
+</form>
+
+<canvas id="posterCanvas" width="1080" height="1350" class="hidden mt-6"></canvas>
+
+<button id="downloadBtn" class="hidden mt-4 bg-green-600 text-white p-3 rounded font-bold">
+Download Poster
+</button>
+
+</div>
+
 <script>
 
 const canvas = document.getElementById("posterCanvas");
@@ -16,14 +87,7 @@ const clusterName = document.getElementById("clusterName");
 const premiumInput = document.getElementById("premium");
 const productType = document.getElementById("productType");
 
-const hdfcLogo = new Image();
-hdfcLogo.src = "./assets/hdfc-logo.PNG";
-
-const abLogo = new Image();
-abLogo.src = "./assets/aditya-birla-logo.PNG";
-
 let shimmerOffset = 0;
-
 
 /* ₹ formatting */
 premiumInput.addEventListener("input", function(){
@@ -32,8 +96,7 @@ if(value){ this.value="₹"+Number(value).toLocaleString("en-IN"); }
 else{ this.value=""; }
 });
 
-
-/* Others designation toggle */
+/* Others designation */
 rmDesignation.addEventListener("change", function(){
 if(this.value==="Others"){
 otherDesignation.classList.remove("hidden");
@@ -45,12 +108,11 @@ otherDesignation.value="";
 }
 });
 
-
 form.addEventListener("submit", function(e){
 e.preventDefault();
 
-if(!rmPhoto.files[0]) {
-alert("Please upload RM photo");
+if(!rmPhoto.files[0]){
+alert("Upload RM Photo");
 return;
 }
 
@@ -64,7 +126,7 @@ let designation = rmDesignation.value==="Others"
 ? otherDesignation.value
 : rmDesignation.value;
 
-generatePoster(img,{
+drawPoster(img,{
 rmName: rmName.value.toUpperCase(),
 designation,
 nli: nliType.value,
@@ -75,9 +137,10 @@ premium: premiumInput.value,
 product: productType.value
 });
 
-form.style.display="none";
-canvas.style.display="block";
+form.classList.add("hidden");
+canvas.classList.remove("hidden");
 downloadBtn.classList.remove("hidden");
+
 };
 img.src=ev.target.result;
 };
@@ -85,52 +148,21 @@ img.src=ev.target.result;
 reader.readAsDataURL(rmPhoto.files[0]);
 });
 
+function drawPoster(profile,data){
 
-function generatePoster(profile,data){
-
-function draw(){
+function render(){
 
 ctx.clearRect(0,0,1080,1350);
 
-// 🔥 Attractive deep gradient background
-const bgGrad = ctx.createLinearGradient(0,0,1080,1350);
-bgGrad.addColorStop(0,"#061a2b");
-bgGrad.addColorStop(0.5,"#0d2b4c");
-bgGrad.addColorStop(1,"#020c18");
-ctx.fillStyle=bgGrad;
+// Background
+const bg = ctx.createLinearGradient(0,0,1080,1350);
+bg.addColorStop(0,"#061a2b");
+bg.addColorStop(0.5,"#0d2b4c");
+bg.addColorStop(1,"#020c18");
+ctx.fillStyle=bg;
 ctx.fillRect(0,0,1080,1350);
 
-
-// Subtle golden rings (corporate design element)
-ctx.strokeStyle="rgba(255,215,0,0.15)";
-ctx.lineWidth=3;
-ctx.beginPath();
-ctx.arc(540,600,260,0,Math.PI*2);
-ctx.stroke();
-
-ctx.beginPath();
-ctx.arc(540,600,320,0,Math.PI*2);
-ctx.stroke();
-
-
-// Light beams
-const beamGrad = ctx.createLinearGradient(0,0,1080,0);
-beamGrad.addColorStop(0,"rgba(255,255,255,0.03)");
-beamGrad.addColorStop(0.5,"rgba(255,255,255,0.12)");
-beamGrad.addColorStop(1,"rgba(255,255,255,0.03)");
-ctx.fillStyle=beamGrad;
-ctx.fillRect(shimmerOffset-400,0,400,1350);
-
-
-// Logos
-if(hdfcLogo.complete)
-ctx.drawImage(hdfcLogo,60,60,260,100);
-
-if(abLogo.complete)
-ctx.drawImage(abLogo,760,60,250,100);
-
-
-// Gold shimmer gradient text
+// Gold shimmer gradient
 const gold = ctx.createLinearGradient(shimmerOffset,0,shimmerOffset+300,0);
 gold.addColorStop(0,"#FFD700");
 gold.addColorStop(0.5,"#fff5b1");
@@ -138,6 +170,7 @@ gold.addColorStop(1,"#d4af37");
 
 ctx.textAlign="center";
 
+// Title
 let title = data.level==="Level 1"
 ? "BBH-Champions Club"
 : "GHMD-Champions Club";
@@ -146,22 +179,19 @@ ctx.fillStyle=gold;
 ctx.font="bold 80px Inter";
 ctx.fillText(title,540,250);
 
-
-// NLI text
+// NLI
 ctx.fillStyle="#ffffff";
 ctx.font="bold 48px Inter";
 ctx.fillText(data.nli,540,330);
 
-
-// Spotlight glow
+// Spotlight
 const spotlight = ctx.createRadialGradient(540,600,100,540,600,420);
 spotlight.addColorStop(0,"rgba(255,215,0,0.35)");
 spotlight.addColorStop(1,"rgba(255,215,0,0)");
 ctx.fillStyle=spotlight;
 ctx.fillRect(0,0,1080,1350);
 
-
-// Profile circle
+// Profile
 ctx.save();
 ctx.beginPath();
 ctx.arc(540,600,190,0,Math.PI*2);
@@ -174,63 +204,55 @@ ctx.drawImage(profile,
 size,size,
 350,410,
 380,380);
+
 ctx.restore();
 
-
-// Gold border
+// Border
 ctx.lineWidth=18;
 ctx.strokeStyle=gold;
 ctx.beginPath();
 ctx.arc(540,600,190,0,Math.PI*2);
 ctx.stroke();
 
-
 // Name
 ctx.fillStyle=gold;
 ctx.font="bold 60px Inter";
 ctx.fillText(data.rmName,540,900);
 
-
 // Designation
 ctx.font="bold 40px Inter";
 ctx.fillText("("+data.designation+")",540,950);
-
 
 // Branch
 ctx.fillStyle="#ffffff";
 ctx.font="30px Inter";
 ctx.fillText("Branch: "+data.branch+" | Cluster: "+data.cluster,540,1005);
 
-
-// Premium glass card
+// Glass Premium Box
 ctx.fillStyle="rgba(255,255,255,0.1)";
 ctx.fillRect(240,1040,600,130);
 ctx.strokeStyle="rgba(255,255,255,0.3)";
 ctx.strokeRect(240,1040,600,130);
 
-
-// Premium BIG
+// Premium
 ctx.fillStyle=gold;
 ctx.font="bold 95px Inter";
 ctx.fillText(data.premium,540,1130);
-
 
 // Product
 ctx.fillStyle="#ffffff";
 ctx.font="28px Inter";
 ctx.fillText("Product: "+data.product,540,1200);
 
-
-// Shimmer animation
+// Shimmer loop
 shimmerOffset+=4;
-if(shimmerOffset>1600) shimmerOffset=-400;
+if(shimmerOffset>1500) shimmerOffset=-300;
 
-requestAnimationFrame(draw);
+requestAnimationFrame(render);
 }
 
-draw();
+render();
 }
-
 
 downloadBtn.addEventListener("click",function(){
 const link=document.createElement("a");
@@ -240,3 +262,6 @@ link.click();
 });
 
 </script>
+
+</body>
+</html>
