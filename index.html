@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Corporate Champions Club Poster</title>
+<title>Champions Club V3.0</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-body { font-family: 'Inter', sans-serif; background:#f0f4f8; }
+body { font-family:'Inter', sans-serif; background:#eef2f7; }
 .container { max-width:550px; margin:auto; }
-canvas { border-radius:20px; width:100%; }
+canvas { border-radius:20px; width:100%; box-shadow:0 20px 50px rgba(0,0,0,0.2); }
 </style>
 </head>
 
@@ -20,8 +20,8 @@ canvas { border-radius:20px; width:100%; }
 
 <form id="posterForm" class="flex flex-col gap-4">
 
-<h1 class="text-3xl font-bold text-center text-blue-900 mb-4">
-Create Champions Club Poster
+<h1 class="text-3xl font-bold text-center text-blue-900">
+Champions Club – Version 3.0
 </h1>
 
 <input type="file" id="rmPhoto" accept="image/*" required>
@@ -33,12 +33,16 @@ Create Champions Club Poster
 <option value="RM">RM</option>
 <option value="PB">PB</option>
 <option value="PBA">PBA</option>
+<option value="Others">Others</option>
 </select>
+
+<input type="text" id="otherDesignation" placeholder="Enter Designation"
+class="border p-2 rounded hidden">
 
 <select id="nliType" required class="border p-2 rounded">
 <option value="" disabled selected>Select Criteria</option>
-<option value="NLI Criteria Met">NLI Criteria Met</option>
-<option value="NLI Criteria Met">NLI Criteria Met</option>
+<option value="NLI + LI Met">NLI + LI Met</option>
+<option value="NLI Met">NLI Met</option>
 </select>
 
 <select id="clubLevel" required class="border p-2 rounded">
@@ -49,10 +53,12 @@ Create Champions Club Poster
 
 <input type="text" id="branchName" placeholder="Branch Name" required class="border p-2 rounded">
 <input type="text" id="clusterName" placeholder="Cluster Name" required class="border p-2 rounded">
-<input type="tel" id="premium" placeholder="Premium Amount" required class="border p-2 rounded">
+
+<input type="text" id="premium" placeholder="Premium Amount" required class="border p-2 rounded">
+
 <input type="text" id="productType" placeholder="Product Type" required class="border p-2 rounded">
 
-<button class="bg-blue-700 text-white p-3 rounded font-bold">
+<button class="bg-blue-800 text-white p-3 rounded font-bold">
 Generate Poster
 </button>
 
@@ -60,7 +66,7 @@ Generate Poster
 
 <canvas id="posterCanvas" width="1080" height="1350" style="display:none;"></canvas>
 
-<button id="downloadBtn" class="mt-4 bg-green-600 text-white p-3 rounded font-bold" style="display:none;">
+<button id="downloadBtn" class="mt-4 bg-green-600 text-white p-3 rounded font-bold hidden">
 Download Poster
 </button>
 
@@ -72,11 +78,36 @@ const form = document.getElementById("posterForm");
 const canvas = document.getElementById("posterCanvas");
 const ctx = canvas.getContext("2d");
 const downloadBtn = document.getElementById("downloadBtn");
+const premiumInput = document.getElementById("premium");
+const designationSelect = document.getElementById("rmDesignation");
+const otherDesignationInput = document.getElementById("otherDesignation");
+
+/* Premium formatting ₹ with commas */
+premiumInput.addEventListener("input", function() {
+let value = this.value.replace(/[^0-9]/g,'');
+if(value){
+this.value = "₹" + Number(value).toLocaleString("en-IN");
+}else{
+this.value="";
+}
+});
+
+/* Show Other designation input */
+designationSelect.addEventListener("change", function(){
+if(this.value==="Others"){
+otherDesignationInput.classList.remove("hidden");
+otherDesignationInput.required=true;
+}else{
+otherDesignationInput.classList.add("hidden");
+otherDesignationInput.required=false;
+otherDesignationInput.value="";
+}
+});
 
 form.addEventListener("submit", function(e){
 e.preventDefault();
 
-const file = document.getElementById("rmPhoto").files[0];
+const file = rmPhoto.files[0];
 const reader = new FileReader();
 
 reader.onload = function(event){
@@ -84,9 +115,13 @@ reader.onload = function(event){
 const img = new Image();
 img.onload = function(){
 
+let designationValue = designationSelect.value==="Others"
+? otherDesignationInput.value
+: designationSelect.value;
+
 drawPoster(img,{
 rmName: rmName.value,
-designation: rmDesignation.value,
+designation: designationValue,
 nli: nliType.value,
 level: clubLevel.value,
 branch: branchName.value,
@@ -97,7 +132,8 @@ product: productType.value
 
 form.style.display="none";
 canvas.style.display="block";
-downloadBtn.style.display="block";
+downloadBtn.classList.remove("hidden");
+
 };
 
 img.src = event.target.result;
@@ -108,50 +144,53 @@ reader.readAsDataURL(file);
 
 function drawPoster(img,data){
 
-// Background
+// Luxury Background
 const gradient = ctx.createLinearGradient(0,0,0,1350);
-gradient.addColorStop(0,"#0b1c2d");
-gradient.addColorStop(1,"#102a43");
-ctx.fillStyle = gradient;
+gradient.addColorStop(0,"#071421");
+gradient.addColorStop(1,"#0f2c44");
+ctx.fillStyle=gradient;
 ctx.fillRect(0,0,1080,1350);
 
-// Dynamic Title
-ctx.fillStyle="#FFD700";
-ctx.textAlign="center";
-ctx.font="bold 80px Inter";
+// Gold Gradient Text
+const goldGradient = ctx.createLinearGradient(0,0,1080,0);
+goldGradient.addColorStop(0,"#FFD700");
+goldGradient.addColorStop(0.5,"#fff5b1");
+goldGradient.addColorStop(1,"#d4af37");
 
-let clubTitle = data.level === "Level 1"
+ctx.textAlign="center";
+
+// Dynamic Title
+ctx.fillStyle=goldGradient;
+ctx.font="bold 85px Inter";
+
+let titleText = data.level==="Level 1"
 ? "BBH-Champions Club"
 : "GHMD-Champions Club";
 
-ctx.fillText(clubTitle,540,230);
+ctx.fillText(titleText,540,230);
 
 // Criteria
 ctx.fillStyle="#ffffff";
-ctx.font="bold 45px Inter";
+ctx.font="bold 50px Inter";
 ctx.fillText(data.nli,540,310);
 
-// Trophy Left
-ctx.font="150px serif";
-ctx.fillText("🏆",200,550);
-
-// Trophy Right
-ctx.fillText("🏆",880,550);
+// Trophy Icons (metallic look)
+ctx.font="170px serif";
+ctx.fillText("🏆",180,550);
+ctx.fillText("🏆",900,550);
 
 // Circular Image
 ctx.save();
 ctx.beginPath();
 ctx.arc(540,600,190,0,Math.PI*2);
-ctx.closePath();
 ctx.clip();
 
-let size = Math.min(img.width,img.height);
+let size=Math.min(img.width,img.height);
 ctx.drawImage(img,
 (img.width-size)/2,
 (img.height-size)/2,
 size,size,
-540-190,
-600-190,
+350,410,
 380,380);
 
 ctx.restore();
@@ -159,38 +198,39 @@ ctx.restore();
 // Golden Border
 ctx.beginPath();
 ctx.arc(540,600,190,0,Math.PI*2);
-ctx.lineWidth=15;
-ctx.strokeStyle="#FFD700";
+ctx.lineWidth=18;
+ctx.strokeStyle=goldGradient;
 ctx.stroke();
 
 // Name
-ctx.fillStyle="#FFD700";
-ctx.font="bold 55px Inter";
+ctx.fillStyle=goldGradient;
+ctx.font="bold 60px Inter";
 ctx.fillText(data.rmName,540,900);
 
 // Designation
-ctx.font="bold 40px Inter";
+ctx.font="bold 42px Inter";
 ctx.fillText("("+data.designation+")",540,950);
 
 // Branch & Cluster
 ctx.fillStyle="#ffffff";
-ctx.font="30px Inter";
-ctx.fillText("Branch: "+data.branch+" | Cluster: "+data.cluster,540,1000);
+ctx.font="32px Inter";
+ctx.fillText("Branch: "+data.branch+" | Cluster: "+data.cluster,540,1005);
 
-// Premium (BIG)
-ctx.fillStyle="#FFD700";
-ctx.font="bold 85px Inter";
-ctx.fillText("₹"+data.premium,540,1100);
+// Premium BIG
+ctx.fillStyle=goldGradient;
+ctx.font="bold 100px Inter";
+ctx.fillText(data.premium,540,1120);
 
 // Product
 ctx.fillStyle="#ffffff";
 ctx.font="30px Inter";
-ctx.fillText("Product: "+data.product,540,1150);
+ctx.fillText("Product: "+data.product,540,1180);
+
 }
 
 downloadBtn.addEventListener("click",function(){
 const link=document.createElement("a");
-link.download="Champions_Club_Poster.png";
+link.download="Champions_Club_V3.png";
 link.href=canvas.toDataURL();
 link.click();
 });
