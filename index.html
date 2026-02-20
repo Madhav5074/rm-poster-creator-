@@ -254,7 +254,26 @@
             ctx.fillStyle = bg;
             ctx.fillRect(0,0,1080,1350);
 
-            /* Top Header Bar - CHANGED TO SOLID WHITE */
+            /* --- Draw Golden Sparkles in Background --- */
+            ctx.save();
+            // Seed randomness based on name to keep sparkles consistent per person (optional, but using basic random here)
+            for (let i = 0; i < 80; i++) {
+                let x = Math.random() * 1080;
+                let y = 150 + Math.random() * 1200; // Keep sparkles below the white header
+                let radius = Math.random() * 3 + 1; // Size between 1px and 4px
+                let opacity = Math.random() * 0.8 + 0.2; // Opacity between 0.2 and 1.0
+                
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 215, 0, ${opacity})`; // Gold color
+                ctx.shadowBlur = Math.random() * 10 + 5;
+                ctx.shadowColor = "white";
+                ctx.fill();
+            }
+            ctx.restore();
+            /* ------------------------------------------ */
+
+            /* Top Header Bar */
             ctx.fillStyle = "#ffffff";
             ctx.fillRect(0,0,1080,150);
 
@@ -325,28 +344,28 @@
 
             /* Designation */
             ctx.font = "bold 34px Inter";
-            ctx.fillText("(" + data.designation + ")", 540, 940);
+            ctx.fillText("(" + data.designation + ")", 540, 945);
 
-            /* Branch */
+            /* Branch and Cluster (Font size increased to 32px) */
             ctx.fillStyle = "#ffffff";
-            ctx.font = "26px Inter";
-            ctx.fillText("Branch: " + data.branch + " | Cluster: " + data.cluster, 540, 990);
+            ctx.font = "32px Inter";
+            ctx.fillText("Branch: " + data.branch + " | Cluster: " + data.cluster, 540, 1000);
 
-            /* Premium Plate */
+            /* Premium Plate (Shifted down slightly to accommodate bigger font above) */
             ctx.fillStyle = "rgba(255,255,255,0.08)";
-            ctx.fillRect(280, 1030, 520, 110);
+            ctx.fillRect(280, 1040, 520, 110);
             ctx.strokeStyle = "rgba(255,215,0,0.5)";
             ctx.lineWidth = 3;
-            ctx.strokeRect(280, 1030, 520, 110);
+            ctx.strokeRect(280, 1040, 520, 110);
 
             ctx.fillStyle = gold;
             ctx.font = "bold 80px Inter";
-            ctx.fillText(data.premium, 540, 1110);
+            ctx.fillText(data.premium, 540, 1120);
 
-            /* Product */
+            /* Product (Font size increased to 32px) */
             ctx.fillStyle = "#ffffff";
-            ctx.font = "26px Inter";
-            ctx.fillText("Product: " + data.product, 540, 1200);
+            ctx.font = "32px Inter";
+            ctx.fillText("Product: " + data.product, 540, 1210);
         }
 
         downloadBtn.addEventListener("click", function(){
