@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Champions Club Corporate</title>
+<title>Champions Club – Executive Luxe</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
 body { font-family:'Inter', sans-serif; background:#eef2f7; }
 .container { max-width:550px; margin:auto; }
-canvas { border-radius:20px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.3); }
+canvas { border-radius:22px; width:100%; box-shadow:0 30px 70px rgba(0,0,0,0.35); }
 </style>
 </head>
 
@@ -21,7 +21,7 @@ canvas { border-radius:20px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.3);
 <form id="posterForm" class="flex flex-col gap-4">
 
 <h1 class="text-3xl font-bold text-center text-blue-900">
-Champions Club – Corporate Edition
+Champions Club – Executive Luxe
 </h1>
 
 <input type="file" id="rmPhoto" required class="border p-2 rounded">
@@ -154,15 +154,22 @@ function render(){
 
 ctx.clearRect(0,0,1080,1350);
 
-// Background
+/* Deep luxury background */
 const bg = ctx.createLinearGradient(0,0,1080,1350);
-bg.addColorStop(0,"#061a2b");
-bg.addColorStop(0.5,"#0d2b4c");
+bg.addColorStop(0,"#051421");
+bg.addColorStop(0.5,"#0a2a46");
 bg.addColorStop(1,"#020c18");
 ctx.fillStyle=bg;
 ctx.fillRect(0,0,1080,1350);
 
-// Gold shimmer gradient
+/* Vignette effect */
+const vignette = ctx.createRadialGradient(540,675,200,540,675,900);
+vignette.addColorStop(0,"rgba(0,0,0,0)");
+vignette.addColorStop(1,"rgba(0,0,0,0.6)");
+ctx.fillStyle=vignette;
+ctx.fillRect(0,0,1080,1350);
+
+/* Gold shimmer gradient */
 const gold = ctx.createLinearGradient(shimmerOffset,0,shimmerOffset+300,0);
 gold.addColorStop(0,"#FFD700");
 gold.addColorStop(0.5,"#fff5b1");
@@ -170,31 +177,45 @@ gold.addColorStop(1,"#d4af37");
 
 ctx.textAlign="center";
 
-// Title
+/* Outer Gold Border */
+ctx.lineWidth=6;
+ctx.strokeStyle="rgba(212,175,55,0.6)";
+ctx.strokeRect(40,40,1000,1270);
+
+/* Inner Thin Border */
+ctx.lineWidth=2;
+ctx.strokeStyle="rgba(255,215,0,0.4)";
+ctx.strokeRect(60,60,960,1230);
+
+/* Decorative corner flares */
+ctx.fillStyle="rgba(255,215,0,0.5)";
+ctx.fillRect(60,60,120,4);
+ctx.fillRect(60,60,4,120);
+ctx.fillRect(960,60,120,4);
+ctx.fillRect(1076,60,-4,120);
+
+/* Title */
 let title = data.level==="Level 1"
 ? "BBH-Champions Club"
 : "GHMD-Champions Club";
 
 ctx.fillStyle=gold;
-ctx.font="bold 80px Inter";
-ctx.fillText(title,540,250);
+ctx.font="bold 78px Inter";
+ctx.fillText(title,540,230);
 
-// NLI
+/* Divider */
+ctx.fillStyle="rgba(255,215,0,0.6)";
+ctx.fillRect(240,260,600,3);
+
+/* NLI */
 ctx.fillStyle="#ffffff";
-ctx.font="bold 48px Inter";
-ctx.fillText(data.nli,540,330);
+ctx.font="bold 46px Inter";
+ctx.fillText(data.nli,540,315);
 
-// Spotlight
-const spotlight = ctx.createRadialGradient(540,600,100,540,600,420);
-spotlight.addColorStop(0,"rgba(255,215,0,0.35)");
-spotlight.addColorStop(1,"rgba(255,215,0,0)");
-ctx.fillStyle=spotlight;
-ctx.fillRect(0,0,1080,1350);
-
-// Profile
+/* Profile Circle */
 ctx.save();
 ctx.beginPath();
-ctx.arc(540,600,190,0,Math.PI*2);
+ctx.arc(540,580,180,0,Math.PI*2);
 ctx.clip();
 
 let size=Math.min(profile.width,profile.height);
@@ -202,49 +223,57 @@ ctx.drawImage(profile,
 (profile.width-size)/2,
 (profile.height-size)/2,
 size,size,
-350,410,
-380,380);
-
+360,400,
+360,360);
 ctx.restore();
 
-// Border
-ctx.lineWidth=18;
+/* Double gold frame */
+ctx.lineWidth=14;
 ctx.strokeStyle=gold;
 ctx.beginPath();
-ctx.arc(540,600,190,0,Math.PI*2);
+ctx.arc(540,580,180,0,Math.PI*2);
 ctx.stroke();
 
-// Name
+ctx.lineWidth=3;
+ctx.strokeStyle="rgba(255,215,0,0.5)";
+ctx.beginPath();
+ctx.arc(540,580,200,0,Math.PI*2);
+ctx.stroke();
+
+/* Name */
 ctx.fillStyle=gold;
-ctx.font="bold 60px Inter";
-ctx.fillText(data.rmName,540,900);
+ctx.font="bold 58px Inter";
+ctx.fillText(data.rmName,540,880);
 
-// Designation
-ctx.font="bold 40px Inter";
-ctx.fillText("("+data.designation+")",540,950);
+/* Designation */
+ctx.font="bold 38px Inter";
+ctx.fillText("("+data.designation+")",540,925);
 
-// Branch
-ctx.fillStyle="#ffffff";
-ctx.font="30px Inter";
-ctx.fillText("Branch: "+data.branch+" | Cluster: "+data.cluster,540,1005);
-
-// Glass Premium Box
-ctx.fillStyle="rgba(255,255,255,0.1)";
-ctx.fillRect(240,1040,600,130);
-ctx.strokeStyle="rgba(255,255,255,0.3)";
-ctx.strokeRect(240,1040,600,130);
-
-// Premium
-ctx.fillStyle=gold;
-ctx.font="bold 95px Inter";
-ctx.fillText(data.premium,540,1130);
-
-// Product
+/* Branch */
 ctx.fillStyle="#ffffff";
 ctx.font="28px Inter";
-ctx.fillText("Product: "+data.product,540,1200);
+ctx.fillText("Branch: "+data.branch+" | Cluster: "+data.cluster,540,980);
 
-// Shimmer loop
+/* Premium Glass Card */
+ctx.fillStyle="rgba(255,255,255,0.08)";
+ctx.fillRect(260,1010,560,130);
+ctx.strokeStyle="rgba(255,215,0,0.4)";
+ctx.strokeRect(260,1010,560,130);
+
+ctx.fillStyle=gold;
+ctx.font="bold 92px Inter";
+ctx.fillText(data.premium,540,1105);
+
+/* Bottom Accent */
+ctx.fillStyle="rgba(255,215,0,0.5)";
+ctx.fillRect(340,1145,400,3);
+
+/* Product */
+ctx.fillStyle="#ffffff";
+ctx.font="26px Inter";
+ctx.fillText("Product: "+data.product,540,1195);
+
+/* Shimmer movement */
 shimmerOffset+=4;
 if(shimmerOffset>1500) shimmerOffset=-300;
 
@@ -256,7 +285,7 @@ render();
 
 downloadBtn.addEventListener("click",function(){
 const link=document.createElement("a");
-link.download="Champions_Club_Corporate.png";
+link.download="Champions_Club_Executive_Luxe.png";
 link.href=canvas.toDataURL("image/png");
 link.click();
 });
