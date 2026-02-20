@@ -1,80 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Champions Club V4.0 Ultra</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-body { font-family:'Inter', sans-serif; background:#eef2f7; }
-.container { max-width:550px; margin:auto; }
-canvas { border-radius:24px; width:100%; box-shadow:0 30px 70px rgba(0,0,0,0.25); }
-</style>
-</head>
-
-<body class="flex items-center justify-center min-h-screen p-6">
-
-<div class="container bg-white p-8 rounded-3xl shadow-2xl">
-
-<form id="posterForm" class="flex flex-col gap-4">
-
-<h1 class="text-3xl font-bold text-center text-blue-900">
-Champions Club – Version 4.0 Ultra
-</h1>
-
-<input type="file" id="rmPhoto" accept="image/*" required>
-<input type="text" id="rmName" placeholder="RM Name" required class="border p-2 rounded">
-
-<select id="rmDesignation" required class="border p-2 rounded">
-<option value="" disabled selected>Select Designation</option>
-<option value="RM">RM</option>
-<option value="PB">PB</option>
-<option value="PBA">PBA</option>
-<option value="Others">Others</option>
-</select>
-
-<input type="text" id="otherDesignation" placeholder="Enter Designation"
-class="border p-2 rounded hidden">
-
-<select id="nliType" required class="border p-2 rounded">
-<option value="" disabled selected>Select Criteria</option>
-<option value="NLI + LI Met">NLI + LI Met</option>
-<option value="NLI Met">NLI Met</option>
-</select>
-
-<select id="clubLevel" required class="border p-2 rounded">
-<option value="" disabled selected>Select Level</option>
-<option value="Level 1">Level 1</option>
-<option value="Level 2">Level 2</option>
-</select>
-
-<input type="text" id="branchName" placeholder="Branch Name" required class="border p-2 rounded">
-<input type="text" id="clusterName" placeholder="Cluster Name" required class="border p-2 rounded">
-<input type="text" id="premium" placeholder="Premium Amount" required class="border p-2 rounded">
-<input type="text" id="productType" placeholder="Product Type" required class="border p-2 rounded">
-
-<button class="bg-blue-900 text-white p-3 rounded font-bold">
-Generate Poster
-</button>
-
-</form>
-
-<canvas id="posterCanvas" width="1080" height="1350" style="display:none;"></canvas>
-<button id="downloadBtn" class="mt-4 bg-green-600 text-white p-3 rounded font-bold hidden">
-Download Poster
-</button>
-
-</div>
-
 <script>
 
 const canvas = document.getElementById("posterCanvas");
 const ctx = canvas.getContext("2d");
 const form = document.getElementById("posterForm");
 const downloadBtn = document.getElementById("downloadBtn");
+
+const rmPhoto = document.getElementById("rmPhoto");
+const rmName = document.getElementById("rmName");
+const rmDesignation = document.getElementById("rmDesignation");
+const otherDesignation = document.getElementById("otherDesignation");
+const nliType = document.getElementById("nliType");
+const clubLevel = document.getElementById("clubLevel");
+const branchName = document.getElementById("branchName");
+const clusterName = document.getElementById("clusterName");
 const premiumInput = document.getElementById("premium");
+const productType = document.getElementById("productType");
 
 const trophyImg = new Image();
 trophyImg.src = "./assets/trophy.png";
@@ -87,6 +27,7 @@ abLogo.src = "./assets/aditya-birla-logo.PNG";
 
 let shimmerOffset = 0;
 
+
 /* ₹ formatting */
 premiumInput.addEventListener("input", function(){
 let value=this.value.replace(/[^0-9]/g,'');
@@ -94,7 +35,8 @@ if(value){ this.value="₹"+Number(value).toLocaleString("en-IN"); }
 else{ this.value=""; }
 });
 
-/* Others designation */
+
+/* Others designation toggle */
 rmDesignation.addEventListener("change", function(){
 if(this.value==="Others"){
 otherDesignation.classList.remove("hidden");
@@ -106,10 +48,17 @@ otherDesignation.value="";
 }
 });
 
+
 form.addEventListener("submit", function(e){
 e.preventDefault();
 
+if(!rmPhoto.files[0]) {
+alert("Please upload RM photo");
+return;
+}
+
 const reader=new FileReader();
+
 reader.onload=function(ev){
 const img=new Image();
 img.onload=function(){
@@ -125,7 +74,7 @@ nli: nliType.value,
 level: clubLevel.value,
 branch: branchName.value,
 cluster: clusterName.value,
-premium: premium.value,
+premium: premiumInput.value,
 product: productType.value
 });
 
@@ -135,14 +84,18 @@ downloadBtn.classList.remove("hidden");
 };
 img.src=ev.target.result;
 };
+
 reader.readAsDataURL(rmPhoto.files[0]);
 });
+
 
 function generatePoster(profile,data){
 
 function draw(){
 
-// Attractive luxury gradient background
+ctx.clearRect(0,0,1080,1350);
+
+// Background gradient
 const bgGrad = ctx.createLinearGradient(0,0,1080,1350);
 bgGrad.addColorStop(0,"#061a2b");
 bgGrad.addColorStop(0.5,"#0f3057");
@@ -151,10 +104,13 @@ ctx.fillStyle=bgGrad;
 ctx.fillRect(0,0,1080,1350);
 
 // Logos
+if(hdfcLogo.complete)
 ctx.drawImage(hdfcLogo,60,60,260,100);
+
+if(abLogo.complete)
 ctx.drawImage(abLogo,760,60,250,100);
 
-// Gold gradient text
+// Gold shimmer gradient
 const gold = ctx.createLinearGradient(shimmerOffset,0,shimmerOffset+300,0);
 gold.addColorStop(0,"#FFD700");
 gold.addColorStop(0.5,"#fff5b1");
@@ -162,31 +118,35 @@ gold.addColorStop(1,"#d4af37");
 
 ctx.textAlign="center";
 
-// Dynamic title
+// Title
 ctx.fillStyle=gold;
-ctx.font="bold 85px Inter";
+ctx.font="bold 80px Inter";
+
 let title = data.level==="Level 1"
 ? "BBH-Champions Club"
 : "GHMD-Champions Club";
+
 ctx.fillText(title,540,250);
 
-// NLI text
+// NLI
 ctx.fillStyle="#ffffff";
-ctx.font="bold 50px Inter";
+ctx.font="bold 48px Inter";
 ctx.fillText(data.nli,540,330);
 
-// Trophy PNGs
+// Trophy PNG
+if(trophyImg.complete){
 ctx.drawImage(trophyImg,100,450,220,220);
 ctx.drawImage(trophyImg,760,450,220,220);
+}
 
-// Spotlight glow behind image
+// Spotlight glow
 const spotlight = ctx.createRadialGradient(540,600,100,540,600,400);
-spotlight.addColorStop(0,"rgba(255,215,0,0.5)");
+spotlight.addColorStop(0,"rgba(255,215,0,0.4)");
 spotlight.addColorStop(1,"rgba(255,215,0,0)");
 ctx.fillStyle=spotlight;
 ctx.fillRect(0,0,1080,1350);
 
-// Circular profile
+// Profile circle
 ctx.save();
 ctx.beginPath();
 ctx.arc(540,600,190,0,Math.PI*2);
@@ -201,7 +161,7 @@ size,size,
 380,380);
 ctx.restore();
 
-// Golden border
+// Gold border
 ctx.lineWidth=18;
 ctx.strokeStyle=gold;
 ctx.beginPath();
@@ -219,10 +179,10 @@ ctx.fillText("("+data.designation+")",540,950);
 
 // Branch
 ctx.fillStyle="#ffffff";
-ctx.font="32px Inter";
+ctx.font="30px Inter";
 ctx.fillText("Branch: "+data.branch+" | Cluster: "+data.cluster,540,1005);
 
-// Premium glass card effect
+// Glass premium card
 ctx.fillStyle="rgba(255,255,255,0.1)";
 ctx.fillRect(240,1040,600,130);
 ctx.strokeStyle="rgba(255,255,255,0.3)";
@@ -234,10 +194,10 @@ ctx.fillText(data.premium,540,1130);
 
 // Product
 ctx.fillStyle="#ffffff";
-ctx.font="30px Inter";
+ctx.font="28px Inter";
 ctx.fillText("Product: "+data.product,540,1200);
 
-// Shimmer animation
+// Shimmer loop
 shimmerOffset+=3;
 if(shimmerOffset>1080) shimmerOffset=0;
 
@@ -247,6 +207,7 @@ requestAnimationFrame(draw);
 draw();
 }
 
+
 downloadBtn.addEventListener("click",function(){
 const link=document.createElement("a");
 link.download="Champions_Club_V4_Ultra.png";
@@ -255,6 +216,3 @@ link.click();
 });
 
 </script>
-
-</body>
-</html>
