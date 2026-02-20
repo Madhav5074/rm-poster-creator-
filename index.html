@@ -145,7 +145,7 @@
         </div>
 
         <div class="mt-8 pt-4 border-t border-gray-200 text-center text-sm font-medium text-gray-400">
-            <p>Version 3.3 | Copyright &copy; MADHAV KALRA</p>
+            <p>Version 3.4 | Copyright &copy; MADHAV KALRA</p>
         </div>
 
     </div>
@@ -209,10 +209,40 @@
             return new Promise((resolve) => {
                 const img = new Image();
                 img.onload = () => resolve(img);
-                img.onerror = () => resolve(null); // Return null if missing, prevents breaking
+                img.onerror = () => resolve(null);
                 img.src = src;
             });
         };
+
+        // Helper Function to draw perfect 5-pointed stars
+        function drawStar(ctx, cx, cy, spikes, outerRadius, innerRadius, fillStyle) {
+            let rot = Math.PI / 2 * 3;
+            let x = cx;
+            let y = cy;
+            let step = Math.PI / spikes;
+
+            ctx.beginPath();
+            ctx.moveTo(cx, cy - outerRadius);
+            for (let i = 0; i < spikes; i++) {
+                x = cx + Math.cos(rot) * outerRadius;
+                y = cy + Math.sin(rot) * outerRadius;
+                ctx.lineTo(x, y);
+                rot += step;
+
+                x = cx + Math.cos(rot) * innerRadius;
+                y = cy + Math.sin(rot) * innerRadius;
+                ctx.lineTo(x, y);
+                rot += step;
+            }
+            ctx.lineTo(cx, cy - outerRadius);
+            ctx.closePath();
+            
+            ctx.fillStyle = fillStyle;
+            ctx.shadowColor = "#d4af37";
+            ctx.shadowBlur = 15;
+            ctx.fill();
+            ctx.shadowBlur = 0; // Reset shadow so it doesn't affect other elements
+        }
 
         form.addEventListener("submit", function(e){
             e.preventDefault();
@@ -237,10 +267,7 @@
                 ]);
 
                 if (!hdfcLogo || !abLogo) {
-                    let missing = [];
-                    if(!hdfcLogo) missing.push("./assets/hdfc-logo.PNG");
-                    if(!abLogo) missing.push("./assets/aditya-birla-logo.PNG");
-                    console.warn("Missing files: " + missing.join(", ") + ". Check your assets folder and capitalization.");
+                    console.warn("Missing logos. Check your assets folder and capitalization.");
                 }
 
                 let designation = rmDesignation.value === "Others" 
@@ -283,7 +310,7 @@
             ctx.save();
             for (let i = 0; i < 80; i++) {
                 let x = Math.random() * 1080;
-                let y = 160 + Math.random() * 1190; // Adjusted to start below the new header
+                let y = 160 + Math.random() * 1190;
                 let radius = Math.random() * 3 + 1; 
                 let opacity = Math.random() * 0.8 + 0.2; 
                 
@@ -339,27 +366,18 @@
             ctx.fillText(data.nli, 540, 330);
 
             /* =========================================
-               DECORATIVE SWOOSHES ON BOTH SIDES (NEW)
+               OPTION 1: THE "HALL OF FAME" STARS
             ========================================= */
-            ctx.save();
-            ctx.lineWidth = 8;
-            ctx.strokeStyle = gold; // Use the existing text gold gradient
-            ctx.lineCap = "round";
-            ctx.shadowColor = "#d4af37";
-            ctx.shadowBlur = 10;
+            // Left side stars (creating a subtle framing curve)
+            drawStar(ctx, 280, 600, 5, 45, 18, gold); // Main Left Star
+            drawStar(ctx, 200, 480, 5, 25, 10, gold); // Top Left Star
+            drawStar(ctx, 200, 720, 5, 25, 10, gold); // Bottom Left Star
 
-            // Left Side Swooshes
-            ctx.beginPath(); ctx.moveTo(350, 550); ctx.quadraticCurveTo(250, 500, 200, 400); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(360, 600); ctx.quadraticCurveTo(260, 580, 220, 500); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(370, 650); ctx.quadraticCurveTo(280, 660, 240, 600); ctx.stroke();
-
-            // Right Side Swooshes (Mirrored)
-            ctx.beginPath(); ctx.moveTo(1080-350, 550); ctx.quadraticCurveTo(1080-250, 500, 1080-200, 400); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(1080-360, 600); ctx.quadraticCurveTo(1080-260, 580, 1080-220, 500); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(1080-370, 650); ctx.quadraticCurveTo(1080-280, 660, 1080-240, 600); ctx.stroke();
-            ctx.restore();
+            // Right side stars
+            drawStar(ctx, 1080 - 280, 600, 5, 45, 18, gold); // Main Right Star
+            drawStar(ctx, 1080 - 200, 480, 5, 25, 10, gold); // Top Right Star
+            drawStar(ctx, 1080 - 200, 720, 5, 25, 10, gold); // Bottom Right Star
             /* ========================================= */
-
 
             /* Profile Image inside Circle */
             if(profile) {
