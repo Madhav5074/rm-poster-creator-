@@ -258,7 +258,7 @@
             ctx.save();
             for (let i = 0; i < 80; i++) {
                 let x = Math.random() * 1080;
-                let y = 150 + Math.random() * 1200; 
+                let y = 160 + Math.random() * 1190; // Adjusted to start below the new header
                 let radius = Math.random() * 3 + 1; 
                 let opacity = Math.random() * 0.8 + 0.2; 
                 
@@ -271,22 +271,24 @@
             }
             ctx.restore();
 
-            /* Top Header Bar */
+            /* Top Header Bar - Increased height to 160px for extra space */
             ctx.fillStyle = "#ffffff";
-            ctx.fillRect(0,0,1080,150);
+            ctx.fillRect(0,0,1080,160);
 
-            /* Draw Logos Safely and Centered Vertically */
+            /* Draw Logos Safely - PUSHED DOWN to clear the thick border */
             if(hdfcLogo){
                 let width = 200;
                 let height = (hdfcLogo.naturalHeight / hdfcLogo.naturalWidth) * width;
-                let yPos = (150 - height) / 2; 
+                // Shifted down by roughly 20px so the border doesn't cover them
+                let yPos = (160 - height) / 2 + 15; 
                 ctx.drawImage(hdfcLogo, 80, yPos, width, height);
             }
 
             if(abLogo){
                 let width = 200;
                 let height = (abLogo.naturalHeight / abLogo.naturalWidth) * width;
-                let yPos = (150 - height) / 2; 
+                // Shifted down identically to match HDFC logo
+                let yPos = (160 - height) / 2 + 15; 
                 ctx.drawImage(abLogo, 800, yPos, width, height);
             }
 
@@ -365,14 +367,12 @@
             ctx.font = "32px Inter";
             ctx.fillText("Product: " + data.product, 540, 1210);
 
-
             /* =========================================
-               STYLISH GOLDEN BORDERS (New Addition)
+               STYLISH GOLDEN BORDERS 
             ========================================= */
             ctx.save();
 
             // 1. Create a Metallic Gold Gradient for the borders
-            // Using diagonal coordinates for a metallic sheen effect
             const borderGold = ctx.createLinearGradient(0, 0, 1080, 1350);
             borderGold.addColorStop(0, "#b8860b");   // Dark Goldenrod
             borderGold.addColorStop(0.2, "#d4af37");  // Metallic Gold
