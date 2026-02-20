@@ -365,20 +365,38 @@
             ctx.font = "bold 44px Inter";
             ctx.fillText(data.nli, 540, 330);
 
-            /* =========================================
-               OPTION 1: THE "HALL OF FAME" STARS
+                        /* =========================================
+               OPTION 2: ART DECO LINES
             ========================================= */
-            // Left side stars (creating a subtle framing curve)
-            drawStar(ctx, 280, 600, 5, 45, 18, gold); // Main Left Star
-            drawStar(ctx, 200, 480, 5, 25, 10, gold); // Top Left Star
-            drawStar(ctx, 200, 720, 5, 25, 10, gold); // Bottom Left Star
-
-            // Right side stars
-            drawStar(ctx, 1080 - 280, 600, 5, 45, 18, gold); // Main Right Star
-            drawStar(ctx, 1080 - 200, 480, 5, 25, 10, gold); // Top Right Star
-            drawStar(ctx, 1080 - 200, 720, 5, 25, 10, gold); // Bottom Right Star
+            ctx.save();
+            ctx.strokeStyle = gold;
+            ctx.lineCap = "round";
+            ctx.shadowColor = "#d4af37";
+            ctx.shadowBlur = 10;
+            
+            // Left side lines
+            ctx.lineWidth = 6;
+            ctx.beginPath(); ctx.moveTo(150, 600); ctx.lineTo(330, 600); ctx.stroke();
+            ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.moveTo(200, 560); ctx.lineTo(330, 560); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(200, 640); ctx.lineTo(330, 640); ctx.stroke();
+            
+            // Right side lines
+            ctx.lineWidth = 6;
+            ctx.beginPath(); ctx.moveTo(1080-330, 600); ctx.lineTo(1080-150, 600); ctx.stroke();
+            ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.moveTo(1080-330, 560); ctx.lineTo(1080-200, 560); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(1080-330, 640); ctx.lineTo(1080-200, 640); ctx.stroke();
+            
+            // Little diamond accents
+            ctx.fillStyle = gold;
+            const drawDiamond = (x,y) => { ctx.beginPath(); ctx.moveTo(x, y-8); ctx.lineTo(x+8, y); ctx.lineTo(x, y+8); ctx.lineTo(x-8, y); ctx.fill(); };
+            drawDiamond(150, 600); drawDiamond(200, 560); drawDiamond(200, 640);
+            drawDiamond(1080-150, 600); drawDiamond(1080-200, 560); drawDiamond(1080-200, 640);
+            ctx.restore();
             /* ========================================= */
 
+            
             /* Profile Image inside Circle */
             if(profile) {
                 ctx.save();
