@@ -16,9 +16,6 @@ const clusterName = document.getElementById("clusterName");
 const premiumInput = document.getElementById("premium");
 const productType = document.getElementById("productType");
 
-const trophyImg = new Image();
-trophyImg.src = "./assets/trophy.png";
-
 const hdfcLogo = new Image();
 hdfcLogo.src = "./assets/hdfc-logo.PNG";
 
@@ -95,13 +92,35 @@ function draw(){
 
 ctx.clearRect(0,0,1080,1350);
 
-// Background gradient
+// 🔥 Attractive deep gradient background
 const bgGrad = ctx.createLinearGradient(0,0,1080,1350);
 bgGrad.addColorStop(0,"#061a2b");
-bgGrad.addColorStop(0.5,"#0f3057");
-bgGrad.addColorStop(1,"#000814");
+bgGrad.addColorStop(0.5,"#0d2b4c");
+bgGrad.addColorStop(1,"#020c18");
 ctx.fillStyle=bgGrad;
 ctx.fillRect(0,0,1080,1350);
+
+
+// Subtle golden rings (corporate design element)
+ctx.strokeStyle="rgba(255,215,0,0.15)";
+ctx.lineWidth=3;
+ctx.beginPath();
+ctx.arc(540,600,260,0,Math.PI*2);
+ctx.stroke();
+
+ctx.beginPath();
+ctx.arc(540,600,320,0,Math.PI*2);
+ctx.stroke();
+
+
+// Light beams
+const beamGrad = ctx.createLinearGradient(0,0,1080,0);
+beamGrad.addColorStop(0,"rgba(255,255,255,0.03)");
+beamGrad.addColorStop(0.5,"rgba(255,255,255,0.12)");
+beamGrad.addColorStop(1,"rgba(255,255,255,0.03)");
+ctx.fillStyle=beamGrad;
+ctx.fillRect(shimmerOffset-400,0,400,1350);
+
 
 // Logos
 if(hdfcLogo.complete)
@@ -110,7 +129,8 @@ ctx.drawImage(hdfcLogo,60,60,260,100);
 if(abLogo.complete)
 ctx.drawImage(abLogo,760,60,250,100);
 
-// Gold shimmer gradient
+
+// Gold shimmer gradient text
 const gold = ctx.createLinearGradient(shimmerOffset,0,shimmerOffset+300,0);
 gold.addColorStop(0,"#FFD700");
 gold.addColorStop(0.5,"#fff5b1");
@@ -118,33 +138,28 @@ gold.addColorStop(1,"#d4af37");
 
 ctx.textAlign="center";
 
-// Title
-ctx.fillStyle=gold;
-ctx.font="bold 80px Inter";
-
 let title = data.level==="Level 1"
 ? "BBH-Champions Club"
 : "GHMD-Champions Club";
 
+ctx.fillStyle=gold;
+ctx.font="bold 80px Inter";
 ctx.fillText(title,540,250);
 
-// NLI
+
+// NLI text
 ctx.fillStyle="#ffffff";
 ctx.font="bold 48px Inter";
 ctx.fillText(data.nli,540,330);
 
-// Trophy PNG
-if(trophyImg.complete){
-ctx.drawImage(trophyImg,100,450,220,220);
-ctx.drawImage(trophyImg,760,450,220,220);
-}
 
 // Spotlight glow
-const spotlight = ctx.createRadialGradient(540,600,100,540,600,400);
-spotlight.addColorStop(0,"rgba(255,215,0,0.4)");
+const spotlight = ctx.createRadialGradient(540,600,100,540,600,420);
+spotlight.addColorStop(0,"rgba(255,215,0,0.35)");
 spotlight.addColorStop(1,"rgba(255,215,0,0)");
 ctx.fillStyle=spotlight;
 ctx.fillRect(0,0,1080,1350);
+
 
 // Profile circle
 ctx.save();
@@ -161,6 +176,7 @@ size,size,
 380,380);
 ctx.restore();
 
+
 // Gold border
 ctx.lineWidth=18;
 ctx.strokeStyle=gold;
@@ -168,38 +184,46 @@ ctx.beginPath();
 ctx.arc(540,600,190,0,Math.PI*2);
 ctx.stroke();
 
+
 // Name
 ctx.fillStyle=gold;
 ctx.font="bold 60px Inter";
 ctx.fillText(data.rmName,540,900);
 
+
 // Designation
 ctx.font="bold 40px Inter";
 ctx.fillText("("+data.designation+")",540,950);
+
 
 // Branch
 ctx.fillStyle="#ffffff";
 ctx.font="30px Inter";
 ctx.fillText("Branch: "+data.branch+" | Cluster: "+data.cluster,540,1005);
 
-// Glass premium card
+
+// Premium glass card
 ctx.fillStyle="rgba(255,255,255,0.1)";
 ctx.fillRect(240,1040,600,130);
 ctx.strokeStyle="rgba(255,255,255,0.3)";
 ctx.strokeRect(240,1040,600,130);
 
+
+// Premium BIG
 ctx.fillStyle=gold;
 ctx.font="bold 95px Inter";
 ctx.fillText(data.premium,540,1130);
+
 
 // Product
 ctx.fillStyle="#ffffff";
 ctx.font="28px Inter";
 ctx.fillText("Product: "+data.product,540,1200);
 
-// Shimmer loop
-shimmerOffset+=3;
-if(shimmerOffset>1080) shimmerOffset=0;
+
+// Shimmer animation
+shimmerOffset+=4;
+if(shimmerOffset>1600) shimmerOffset=-400;
 
 requestAnimationFrame(draw);
 }
@@ -210,7 +234,7 @@ draw();
 
 downloadBtn.addEventListener("click",function(){
 const link=document.createElement("a");
-link.download="Champions_Club_V4_Ultra.png";
+link.download="Champions_Club_Corporate.png";
 link.href=canvas.toDataURL("image/png");
 link.click();
 });
