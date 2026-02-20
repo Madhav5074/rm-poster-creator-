@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Champions Club – Award Night</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -21,10 +22,11 @@ canvas { border-radius:20px; width:100%; box-shadow:0 40px 100px rgba(0,0,0,0.6)
 <form id="posterForm" class="flex flex-col gap-4">
 
 <h1 class="text-3xl font-bold text-center text-blue-900">
-Champions Club – Award Night
+Champions Club – Award Night Edition
 </h1>
 
 <input type="file" id="rmPhoto" required class="border p-2 rounded">
+
 <input type="text" id="rmName" placeholder="RM Name" required class="border p-2 rounded">
 
 <select id="rmDesignation" required class="border p-2 rounded">
@@ -87,6 +89,13 @@ const clusterName = document.getElementById("clusterName");
 const premiumInput = document.getElementById("premium");
 const productType = document.getElementById("productType");
 
+/* Load Logos */
+const hdfcLogo = new Image();
+hdfcLogo.src = "./assets/hdfc-logo.PNG";
+
+const abLogo = new Image();
+abLogo.src = "./assets/aditya-birla-logo.PNG";
+
 /* ₹ formatting */
 premiumInput.addEventListener("input", function(){
 let value=this.value.replace(/[^0-9]/g,'');
@@ -94,7 +103,7 @@ if(value){ this.value="₹"+Number(value).toLocaleString("en-IN"); }
 else{ this.value=""; }
 });
 
-/* Others designation */
+/* Others designation toggle */
 rmDesignation.addEventListener("change", function(){
 if(this.value==="Others"){
 otherDesignation.classList.remove("hidden");
@@ -109,14 +118,15 @@ otherDesignation.value="";
 form.addEventListener("submit", function(e){
 e.preventDefault();
 
-if(!rmPhoto.files[0]){
-alert("Please upload RM Photo");
+if(!rmPhoto.files || !rmPhoto.files[0]){
+alert("Please upload RM photo");
 return;
 }
 
 const reader = new FileReader();
 
 reader.onload = function(ev){
+
 const img = new Image();
 
 img.onload = function(){
@@ -139,6 +149,11 @@ product: productType.value
 form.classList.add("hidden");
 canvas.classList.remove("hidden");
 downloadBtn.classList.remove("hidden");
+
+};
+
+img.onerror = function(){
+alert("Error loading image.");
 };
 
 img.src = ev.target.result;
@@ -151,7 +166,7 @@ function drawPoster(profile,data){
 
 ctx.clearRect(0,0,1080,1350);
 
-/* Cinematic background */
+/* Cinematic Background */
 const bg = ctx.createLinearGradient(0,0,1080,1350);
 bg.addColorStop(0,"#000814");
 bg.addColorStop(0.5,"#001d3d");
@@ -159,7 +174,19 @@ bg.addColorStop(1,"#000814");
 ctx.fillStyle=bg;
 ctx.fillRect(0,0,1080,1350);
 
-/* Gold gradient */
+/* Side decorative panels */
+ctx.fillStyle="rgba(255,215,0,0.05)";
+ctx.fillRect(0,0,120,1350);
+ctx.fillRect(960,0,120,1350);
+
+/* Logos */
+if(hdfcLogo.complete)
+ctx.drawImage(hdfcLogo,60,60,220,90);
+
+if(abLogo.complete)
+ctx.drawImage(abLogo,800,60,220,90);
+
+/* Gold Gradient */
 const gold = ctx.createLinearGradient(0,0,1080,0);
 gold.addColorStop(0,"#d4af37");
 gold.addColorStop(0.5,"#fff5b1");
@@ -177,7 +204,7 @@ ctx.font="bold 80px Inter";
 ctx.fillText(title,540,240);
 
 /* Divider */
-ctx.fillStyle="rgba(255,215,0,0.5)";
+ctx.fillStyle="rgba(255,215,0,0.6)";
 ctx.fillRect(260,260,560,3);
 
 /* NLI */
@@ -185,7 +212,7 @@ ctx.fillStyle="#ffffff";
 ctx.font="bold 46px Inter";
 ctx.fillText(data.nli,540,310);
 
-/* Profile */
+/* Profile Circle */
 ctx.save();
 ctx.beginPath();
 ctx.arc(540,580,170,0,Math.PI*2);
@@ -198,9 +225,10 @@ ctx.drawImage(profile,
 size,size,
 370,410,
 340,340);
+
 ctx.restore();
 
-/* Border */
+/* Gold Border */
 ctx.lineWidth=12;
 ctx.strokeStyle=gold;
 ctx.beginPath();
@@ -221,7 +249,7 @@ ctx.fillStyle="#ffffff";
 ctx.font="26px Inter";
 ctx.fillText("Branch: "+data.branch+" | Cluster: "+data.cluster,540,940);
 
-/* Premium */
+/* Premium Box */
 ctx.fillStyle="rgba(255,255,255,0.08)";
 ctx.fillRect(270,970,540,120);
 ctx.strokeStyle="rgba(255,215,0,0.5)";
