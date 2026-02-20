@@ -145,7 +145,7 @@
         </div>
 
         <div class="mt-8 pt-4 border-t border-gray-200 text-center text-sm font-medium text-gray-400">
-            <p>Version 3.2 | Copyright &copy; MADHAV KALRA</p>
+            <p>Version 3.3 | Copyright &copy; MADHAV KALRA</p>
         </div>
 
     </div>
@@ -337,6 +337,29 @@
             ctx.fillStyle = "#ffffff";
             ctx.font = "bold 44px Inter";
             ctx.fillText(data.nli, 540, 330);
+
+            /* =========================================
+               DECORATIVE SWOOSHES ON BOTH SIDES (NEW)
+            ========================================= */
+            ctx.save();
+            ctx.lineWidth = 8;
+            ctx.strokeStyle = gold; // Use the existing text gold gradient
+            ctx.lineCap = "round";
+            ctx.shadowColor = "#d4af37";
+            ctx.shadowBlur = 10;
+
+            // Left Side Swooshes
+            ctx.beginPath(); ctx.moveTo(350, 550); ctx.quadraticCurveTo(250, 500, 200, 400); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(360, 600); ctx.quadraticCurveTo(260, 580, 220, 500); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(370, 650); ctx.quadraticCurveTo(280, 660, 240, 600); ctx.stroke();
+
+            // Right Side Swooshes (Mirrored)
+            ctx.beginPath(); ctx.moveTo(1080-350, 550); ctx.quadraticCurveTo(1080-250, 500, 1080-200, 400); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(1080-360, 600); ctx.quadraticCurveTo(1080-260, 580, 1080-220, 500); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(1080-370, 650); ctx.quadraticCurveTo(1080-280, 660, 1080-240, 600); ctx.stroke();
+            ctx.restore();
+            /* ========================================= */
+
 
             /* Profile Image inside Circle */
             if(profile) {
