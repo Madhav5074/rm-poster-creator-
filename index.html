@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Champions Club – Award Night Premium</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { 
@@ -145,7 +145,7 @@
         </div>
 
         <div class="mt-8 pt-4 border-t border-gray-200 text-center text-sm font-medium text-gray-400">
-            <p>Version 3.1 | Copyright &copy; MADHAV KALRA</p>
+            <p>Version 3.2 | Copyright &copy; MADHAV KALRA</p>
         </div>
 
     </div>
@@ -171,7 +171,6 @@
         const premiumInput = document.getElementById("premium");
         const productType = document.getElementById("productType");
         
-        // New DOM elements
         const bmSalutation = document.getElementById("bmSalutation");
         const bmName = document.getElementById("bmName");
 
@@ -370,9 +369,9 @@
             ctx.font = "bold 34px Inter";
             ctx.fillText("(" + data.designation + ")", 540, 945);
 
-            /* Branch and Cluster (Font size 32px) */
+            /* Branch and Cluster (Font size 32px, Bold) */
             ctx.fillStyle = "#ffffff";
-            ctx.font = "32px Inter";
+            ctx.font = "bold 32px Inter";
             ctx.fillText("Branch: " + data.branch + " | Cluster: " + data.cluster, 540, 1000);
 
             /* Premium Plate plate */
@@ -386,14 +385,14 @@
             ctx.font = "bold 80px Inter";
             ctx.fillText(data.premium, 540, 1120);
 
-            /* Product (Font size 32px) */
+            /* Product (Font size 32px, Bold) */
             ctx.fillStyle = "#ffffff";
-            ctx.font = "32px Inter";
+            ctx.font = "bold 32px Inter";
             ctx.fillText("Product: " + data.product, 540, 1210);
 
-            /* Branch Manager Thank You Note (NEW) */
+            /* Branch Manager Thank You Note (Font size 24px, Bold Italic) */
             ctx.fillStyle = "#d4af37"; // Elegant Gold
-            ctx.font = "italic 24px Inter";
+            ctx.font = "bold italic 24px Inter";
             let bmThanks = `Heartfelt thanks to BM ${data.bmSalutation} ${data.bmName} for Constant Motivation and Support`;
             ctx.fillText(bmThanks, 540, 1270);
 
