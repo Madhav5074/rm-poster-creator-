@@ -1,74 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Champions Club – Award Night Edition</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-body { font-family:'Inter', sans-serif; background:#0a0f18; }
-.container { max-width:550px; margin:auto; }
-canvas { border-radius:24px; width:100%; box-shadow:0 40px 100px rgba(0,0,0,0.6); }
-</style>
-</head>
-
-<body class="flex items-center justify-center min-h-screen p-6">
-
-<div class="container bg-white p-8 rounded-3xl shadow-2xl">
-
-<form id="posterForm" class="flex flex-col gap-4">
-
-<h1 class="text-3xl font-bold text-center text-blue-900">
-Champions Club – Award Night
-</h1>
-
-<input type="file" id="rmPhoto" required class="border p-2 rounded">
-<input type="text" id="rmName" placeholder="RM Name" required class="border p-2 rounded">
-
-<select id="rmDesignation" required class="border p-2 rounded">
-<option value="" disabled selected>Select Designation</option>
-<option value="RM">RM</option>
-<option value="PB">PB</option>
-<option value="PBA">PBA</option>
-<option value="Others">Others</option>
-</select>
-
-<input type="text" id="otherDesignation" placeholder="Enter Designation"
-class="border p-2 rounded hidden">
-
-<select id="nliType" required class="border p-2 rounded">
-<option value="" disabled selected>Select Criteria</option>
-<option value="NLI + LI Met">NLI + LI Met</option>
-<option value="NLI Met">NLI Met</option>
-</select>
-
-<select id="clubLevel" required class="border p-2 rounded">
-<option value="" disabled selected>Select Level</option>
-<option value="Level 1">Level 1</option>
-<option value="Level 2">Level 2</option>
-</select>
-
-<input type="text" id="branchName" placeholder="Branch Name" required class="border p-2 rounded">
-<input type="text" id="clusterName" placeholder="Cluster Name" required class="border p-2 rounded">
-<input type="text" id="premium" placeholder="Premium Amount" required class="border p-2 rounded">
-<input type="text" id="productType" placeholder="Product Type" required class="border p-2 rounded">
-
-<button type="submit" class="bg-black text-white p-3 rounded font-bold">
-Generate Poster
-</button>
-
-</form>
-
-<canvas id="posterCanvas" width="1080" height="1350" class="hidden mt-6"></canvas>
-
-<button id="downloadBtn" class="hidden mt-4 bg-yellow-600 text-white p-3 rounded font-bold">
-Download Poster
-</button>
-
-</div>
-
 <script>
 
 const canvas = document.getElementById("posterCanvas");
@@ -97,12 +26,12 @@ let shimmerOffset = 0;
 
 /* Gold particles */
 const particles = [];
-for(let i=0;i<60;i++){
+for(let i=0;i<50;i++){
 particles.push({
 x:Math.random()*1080,
 y:Math.random()*1350,
 r:Math.random()*2,
-speed:Math.random()*0.5+0.2
+speed:Math.random()*0.4+0.2
 });
 }
 
@@ -128,10 +57,18 @@ otherDesignation.value="";
 form.addEventListener("submit", function(e){
 e.preventDefault();
 
-const reader=new FileReader();
-reader.onload=function(ev){
-const img=new Image();
-img.onload=function(){
+if(!rmPhoto.files || !rmPhoto.files[0]){
+alert("Please upload RM Photo");
+return;
+}
+
+const file = rmPhoto.files[0];
+const reader = new FileReader();
+
+reader.onload = function(ev){
+const img = new Image();
+
+img.onload = function(){
 
 let designation = rmDesignation.value==="Others"
 ? otherDesignation.value
@@ -151,12 +88,18 @@ product: productType.value
 form.classList.add("hidden");
 canvas.classList.remove("hidden");
 downloadBtn.classList.remove("hidden");
+};
 
+img.onerror = function(){
+alert("Error loading image. Try another photo.");
 };
-img.src=ev.target.result;
+
+img.src = ev.target.result;
 };
-reader.readAsDataURL(rmPhoto.files[0]);
+
+reader.readAsDataURL(file);
 });
+
 
 function drawPoster(profile,data){
 
@@ -186,7 +129,7 @@ if(p.y<0) p.y=1350;
 if(hdfcLogo.complete) ctx.drawImage(hdfcLogo,60,60,220,90);
 if(abLogo.complete) ctx.drawImage(abLogo,800,60,220,90);
 
-/* Metallic gold */
+/* Gold shimmer */
 const gold = ctx.createLinearGradient(shimmerOffset,0,shimmerOffset+400,0);
 gold.addColorStop(0,"#d4af37");
 gold.addColorStop(0.5,"#fff5b1");
@@ -203,7 +146,7 @@ ctx.fillStyle=gold;
 ctx.font="bold 80px Inter";
 ctx.fillText(title,540,240);
 
-/* Animated gold sweep */
+/* Sweep line */
 ctx.fillStyle="rgba(255,215,0,0.5)";
 ctx.fillRect(shimmerOffset-200,255,200,4);
 
@@ -281,6 +224,3 @@ link.click();
 });
 
 </script>
-
-</body>
-</html>
