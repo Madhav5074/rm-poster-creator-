@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Champions Club – Signature Executive</title>
+<title>Champions Club – Award Night Edition</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-body { font-family:'Inter', sans-serif; background:#eef2f7; }
+body { font-family:'Inter', sans-serif; background:#0a0f18; }
 .container { max-width:550px; margin:auto; }
-canvas { border-radius:22px; width:100%; box-shadow:0 30px 80px rgba(0,0,0,0.35); }
+canvas { border-radius:24px; width:100%; box-shadow:0 40px 100px rgba(0,0,0,0.6); }
 </style>
 </head>
 
@@ -21,7 +21,7 @@ canvas { border-radius:22px; width:100%; box-shadow:0 30px 80px rgba(0,0,0,0.35)
 <form id="posterForm" class="flex flex-col gap-4">
 
 <h1 class="text-3xl font-bold text-center text-blue-900">
-Champions Club – Signature Edition
+Champions Club – Award Night
 </h1>
 
 <input type="file" id="rmPhoto" required class="border p-2 rounded">
@@ -55,7 +55,7 @@ class="border p-2 rounded hidden">
 <input type="text" id="premium" placeholder="Premium Amount" required class="border p-2 rounded">
 <input type="text" id="productType" placeholder="Product Type" required class="border p-2 rounded">
 
-<button type="submit" class="bg-blue-900 text-white p-3 rounded font-bold">
+<button type="submit" class="bg-black text-white p-3 rounded font-bold">
 Generate Poster
 </button>
 
@@ -63,7 +63,7 @@ Generate Poster
 
 <canvas id="posterCanvas" width="1080" height="1350" class="hidden mt-6"></canvas>
 
-<button id="downloadBtn" class="hidden mt-4 bg-green-600 text-white p-3 rounded font-bold">
+<button id="downloadBtn" class="hidden mt-4 bg-yellow-600 text-white p-3 rounded font-bold">
 Download Poster
 </button>
 
@@ -95,6 +95,17 @@ abLogo.src = "./aditya-birla-logo.PNG";
 
 let shimmerOffset = 0;
 
+/* Gold particles */
+const particles = [];
+for(let i=0;i<60;i++){
+particles.push({
+x:Math.random()*1080,
+y:Math.random()*1350,
+r:Math.random()*2,
+speed:Math.random()*0.5+0.2
+});
+}
+
 /* ₹ formatting */
 premiumInput.addEventListener("input", function(){
 let value=this.value.replace(/[^0-9]/g,'');
@@ -117,13 +128,7 @@ otherDesignation.value="";
 form.addEventListener("submit", function(e){
 e.preventDefault();
 
-if(!rmPhoto.files[0]){
-alert("Upload RM Photo");
-return;
-}
-
 const reader=new FileReader();
-
 reader.onload=function(ev){
 const img=new Image();
 img.onload=function(){
@@ -150,7 +155,6 @@ downloadBtn.classList.remove("hidden");
 };
 img.src=ev.target.result;
 };
-
 reader.readAsDataURL(rmPhoto.files[0]);
 });
 
@@ -160,54 +164,52 @@ function render(){
 
 ctx.clearRect(0,0,1080,1350);
 
-/* Background */
+/* Cinematic background */
 const bg = ctx.createLinearGradient(0,0,1080,1350);
-bg.addColorStop(0,"#04121d");
-bg.addColorStop(0.5,"#08273f");
-bg.addColorStop(1,"#020c18");
+bg.addColorStop(0,"#000814");
+bg.addColorStop(0.5,"#001d3d");
+bg.addColorStop(1,"#000814");
 ctx.fillStyle=bg;
 ctx.fillRect(0,0,1080,1350);
 
-/* Side decorative panels */
-ctx.fillStyle="rgba(255,215,0,0.05)";
-ctx.fillRect(0,0,120,1350);
-ctx.fillRect(960,0,120,1350);
-
-/* Vertical gold accents */
-ctx.fillStyle="rgba(255,215,0,0.5)";
-ctx.fillRect(100,0,3,1350);
-ctx.fillRect(977,0,3,1350);
+/* Floating particles */
+ctx.fillStyle="rgba(255,215,0,0.6)";
+particles.forEach(p=>{
+ctx.beginPath();
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+ctx.fill();
+p.y-=p.speed;
+if(p.y<0) p.y=1350;
+});
 
 /* Logos */
-if(hdfcLogo.complete)
-ctx.drawImage(hdfcLogo,60,60,220,90);
+if(hdfcLogo.complete) ctx.drawImage(hdfcLogo,60,60,220,90);
+if(abLogo.complete) ctx.drawImage(abLogo,800,60,220,90);
 
-if(abLogo.complete)
-ctx.drawImage(abLogo,800,60,220,90);
-
-/* Gold shimmer */
-const gold = ctx.createLinearGradient(shimmerOffset,0,shimmerOffset+300,0);
-gold.addColorStop(0,"#FFD700");
+/* Metallic gold */
+const gold = ctx.createLinearGradient(shimmerOffset,0,shimmerOffset+400,0);
+gold.addColorStop(0,"#d4af37");
 gold.addColorStop(0.5,"#fff5b1");
 gold.addColorStop(1,"#d4af37");
 
 ctx.textAlign="center";
 
+/* Title */
 let title = data.level==="Level 1"
 ? "BBH-Champions Club"
 : "GHMD-Champions Club";
 
 ctx.fillStyle=gold;
-ctx.font="bold 75px Inter";
-ctx.fillText(title,540,230);
+ctx.font="bold 80px Inter";
+ctx.fillText(title,540,240);
 
-/* Divider */
-ctx.fillStyle="rgba(255,215,0,0.6)";
-ctx.fillRect(260,260,560,3);
+/* Animated gold sweep */
+ctx.fillStyle="rgba(255,215,0,0.5)";
+ctx.fillRect(shimmerOffset-200,255,200,4);
 
 /* NLI */
 ctx.fillStyle="#ffffff";
-ctx.font="bold 44px Inter";
+ctx.font="bold 46px Inter";
 ctx.fillText(data.nli,540,310);
 
 /* Profile */
@@ -225,51 +227,45 @@ size,size,
 340,340);
 ctx.restore();
 
-/* Double border */
+/* Gold border */
 ctx.lineWidth=12;
 ctx.strokeStyle=gold;
 ctx.beginPath();
 ctx.arc(540,580,170,0,Math.PI*2);
 ctx.stroke();
 
-ctx.lineWidth=2;
-ctx.strokeStyle="rgba(255,215,0,0.5)";
-ctx.beginPath();
-ctx.arc(540,580,190,0,Math.PI*2);
-ctx.stroke();
-
 /* Name */
 ctx.fillStyle=gold;
-ctx.font="bold 55px Inter";
-ctx.fillText(data.rmName,540,860);
+ctx.font="bold 58px Inter";
+ctx.fillText(data.rmName,540,850);
 
 /* Designation */
 ctx.font="bold 35px Inter";
-ctx.fillText("("+data.designation+")",540,900);
+ctx.fillText("("+data.designation+")",540,890);
 
 /* Branch */
 ctx.fillStyle="#ffffff";
 ctx.font="26px Inter";
-ctx.fillText("Branch: "+data.branch+" | Cluster: "+data.cluster,540,950);
+ctx.fillText("Branch: "+data.branch+" | Cluster: "+data.cluster,540,940);
 
-/* Premium glass */
+/* Premium Plate */
 ctx.fillStyle="rgba(255,255,255,0.08)";
-ctx.fillRect(270,980,540,120);
-ctx.strokeStyle="rgba(255,215,0,0.4)";
-ctx.strokeRect(270,980,540,120);
+ctx.fillRect(270,970,540,120);
+ctx.strokeStyle="rgba(255,215,0,0.5)";
+ctx.strokeRect(270,970,540,120);
 
 ctx.fillStyle=gold;
-ctx.font="bold 85px Inter";
-ctx.fillText(data.premium,540,1065);
+ctx.font="bold 90px Inter";
+ctx.fillText(data.premium,540,1055);
 
 /* Product */
 ctx.fillStyle="#ffffff";
 ctx.font="24px Inter";
-ctx.fillText("Product: "+data.product,540,1120);
+ctx.fillText("Product: "+data.product,540,1110);
 
-/* Shimmer */
-shimmerOffset+=4;
-if(shimmerOffset>1500) shimmerOffset=-300;
+/* shimmer movement */
+shimmerOffset+=6;
+if(shimmerOffset>1500) shimmerOffset=-200;
 
 requestAnimationFrame(render);
 }
@@ -279,7 +275,7 @@ render();
 
 downloadBtn.addEventListener("click",function(){
 const link=document.createElement("a");
-link.download="Champions_Club_Signature.png";
+link.download="Champions_Club_Award_Night.png";
 link.href=canvas.toDataURL("image/png");
 link.click();
 });
