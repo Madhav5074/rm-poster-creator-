@@ -1,464 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aditya Birla Poster Generator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8;
-        }
-        .container {
-            max-width: 550px;
-            margin: auto;
-        }
-        canvas {
-            border: 2px solid #e2e8f0;
-            border-radius: 1.5rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            height: auto;
-            max-width: 1080px;
-        }
-        #posterCanvas, #downloadBtn, #loadingIndicator {
-            display: none;
-        }
-        .version-number {
-            position: fixed;
-            bottom: 1rem;
-            right: 1rem;
-            font-size: 0.875rem;
-            color: #9ca3af;
-        }
-        .copyright-text {
-            position: fixed;
-            bottom: 1rem;
-            left: 1rem;
-            font-size: 0.875rem;
-            color: #9ca3af;
-        }
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border-left-color: #0c4a6e;
-            animation: spin 1s ease infinite;
-        }
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corporate Champions Club Poster</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body { font-family: 'Inter', sans-serif; background:#f0f4f8; }
+.container { max-width:550px; margin:auto; }
+canvas { border-radius:20px; width:100%; }
+</style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen p-6">
 
-    <div class="container bg-white p-10 rounded-3xl shadow-2xl flex flex-col gap-8">
+<body class="flex items-center justify-center min-h-screen p-6">
 
-        <form id="posterForm" class="flex flex-col gap-6">
-            <h1 class="text-4xl font-extrabold text-center text-blue-900 mb-2">Create Your RM Poster</h1>
+<div class="container bg-white p-8 rounded-3xl shadow-2xl">
 
-            <div>
-                <label for="rmPhoto" class="block text-sm font-semibold text-gray-700 mb-2">Upload RM Photo</label>
-                <input type="file" id="rmPhoto" accept="image/*" class="w-full text-sm text-gray-500
-                    file:mr-4 file:py-2 file:px-4
-                    file:rounded-full file:border-0
-                    file:text-sm file:font-semibold
-                    file:bg-blue-50 file:text-blue-700
-                    hover:file:bg-blue-100 cursor-pointer">
-            </div>
-            
-            <div>
-                <label for="rmName" class="block text-sm font-semibold text-gray-700 mb-1">RM Name</label>
-                <input type="text" id="rmName" placeholder="Enter RM Name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
+<form id="posterForm" class="flex flex-col gap-4">
 
-            <div>
-                <label for="rmDesignation" class="block text-sm font-semibold text-gray-700 mb-1">RM Designation</label>
-                <select id="rmDesignation" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="" disabled selected>Select Designation</option>
-                    <option value="RM">RM</option>
-                    <option value="PB">PB</option>
-                    <option value="PBA">PBA</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
+<h1 class="text-3xl font-bold text-center text-blue-900 mb-4">
+Create Champions Club Poster
+</h1>
 
-            <div id="otherDesignationContainer" style="display:none;">
-                <label for="otherDesignation" class="block text-sm font-semibold text-gray-700 mb-1">Specify Other Designation</label>
-                <input type="text" id="otherDesignation" placeholder="e.g., Senior Manager" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-            
-            <div>
-                <label for="policyType" class="block text-sm font-semibold text-gray-700 mb-1">Policy Type</label>
-                <select id="policyType" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="" disabled selected>Select Policy Type</option>
-                    <option value="Fresh">Fresh</option>
-                    <option value="Renewal">Renewal</option>
-                </select>
-            </div>
+<input type="file" id="rmPhoto" accept="image/*" required>
 
-            <div class="flex items-center gap-2">
-                <input type="checkbox" id="bbhQualification" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                <label for="bbhQualification" class="text-sm font-semibold text-gray-700">Spearhead HI+LI Login criteria Met</label>
-            </div>
+<input type="text" id="rmName" placeholder="RM Name" required class="border p-2 rounded">
 
-            <div>
-                <label for="branchName" class="block text-sm font-semibold text-gray-700 mb-1">Branch Name</label>
-                <input type="text" id="branchName" placeholder="Enter Branch Name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
+<select id="rmDesignation" required class="border p-2 rounded">
+<option value="" disabled selected>Select Designation</option>
+<option value="RM">RM</option>
+<option value="PB">PB</option>
+<option value="PBA">PBA</option>
+</select>
 
-            <div>
-                <label for="clusterName" class="block text-sm font-semibold text-gray-700 mb-1">Cluster Name</label>
-                <input type="text" id="clusterName" placeholder="Enter Cluster Name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
+<select id="nliType" required class="border p-2 rounded">
+<option value="" disabled selected>Select Criteria</option>
+<option value="NLI Criteria Met">NLI Criteria Met</option>
+<option value="NLI Criteria Met">NLI Criteria Met</option>
+</select>
 
-            <div>
-                <label for="premium" class="block text-sm font-semibold text-gray-700 mb-1">Premium Amount</label>
-                <input type="tel" id="premium" placeholder="Enter Premium Amount" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
+<select id="clubLevel" required class="border p-2 rounded">
+<option value="" disabled selected>Select Level</option>
+<option value="Level 1">Level 1</option>
+<option value="Level 2">Level 2</option>
+</select>
 
-            <div>
-                <label for="productType" class="block text-sm font-semibold text-gray-700 mb-1">Product Type</label>
-                <select id="productType" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="" disabled selected>Select Product Type</option>
-                    <option value="Active one">Active one</option>
-                    <option value="Active Health V2">Active Health V2</option>
-                </select>
-            </div>
-            
-            <button type="submit" id="generateBtn" class="bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-3 rounded-lg shadow-lg hover:from-blue-700 hover:to-blue-900 transition duration-300 transform hover:scale-105">Generate Poster</button>
-        </form>
+<input type="text" id="branchName" placeholder="Branch Name" required class="border p-2 rounded">
+<input type="text" id="clusterName" placeholder="Cluster Name" required class="border p-2 rounded">
+<input type="tel" id="premium" placeholder="Premium Amount" required class="border p-2 rounded">
+<input type="text" id="productType" placeholder="Product Type" required class="border p-2 rounded">
 
-        <div id="loadingIndicator" class="flex flex-col items-center gap-4">
-            <div class="spinner"></div>
-            <p class="text-gray-700 font-semibold">Generating...</p>
-        </div>
+<button class="bg-blue-700 text-white p-3 rounded font-bold">
+Generate Poster
+</button>
 
-        <div id="posterContainer" class="flex flex-col items-center gap-6">
-            <canvas id="posterCanvas" width="1080" height="1350"></canvas>
-            <button id="downloadBtn" class="bg-gradient-to-r from-green-600 to-green-800 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:from-green-700 hover:to-green-900 transition duration-300 transform hover:scale-105">Download Poster</button>
-        </div>
-        
-    </div>
-    
-    <div class="version-number">
-        Version 2.9
-    </div>
-    <div class="copyright-text">
-        Copyright © MADHAV KALRA
-    </div>
+</form>
 
-    <script>
-        const posterForm = document.getElementById('posterForm');
-        const posterCanvas = document.getElementById('posterCanvas');
-        const ctx = posterCanvas.getContext('2d');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const loadingIndicator = document.getElementById('loadingIndicator');
-        const premiumInput = document.getElementById('premium');
-        const rmDesignationSelect = document.getElementById('rmDesignation');
-        const otherDesignationContainer = document.getElementById('otherDesignationContainer');
-        const otherDesignationInput = document.getElementById('otherDesignation');
-        const bbhQualificationCheckbox = document.getElementById('bbhQualification');
-        
-        const logoUrlAB = './assets/aditya-birla-logo.PNG';
-        const logoUrlHDFC = './assets/hdfc-logo.PNG';
+<canvas id="posterCanvas" width="1080" height="1350" style="display:none;"></canvas>
 
-        premiumInput.addEventListener('input', function(event) {
-            const value = this.value.replace(/[^0-9]/g, '');
-            if (value) {
-                this.value = `₹${Number(value).toLocaleString('en-IN')}`;
-            } else {
-                this.value = '';
-            }
-        });
+<button id="downloadBtn" class="mt-4 bg-green-600 text-white p-3 rounded font-bold" style="display:none;">
+Download Poster
+</button>
 
-        rmDesignationSelect.addEventListener('change', function() {
-            if (this.value === 'Other') {
-                otherDesignationContainer.style.display = 'block';
-                otherDesignationInput.setAttribute('required', 'required');
-            } else {
-                otherDesignationContainer.style.display = 'none';
-                otherDesignationInput.removeAttribute('required');
-                otherDesignationInput.value = '';
-            }
-        });
+</div>
 
-        posterForm.addEventListener('submit', function(event) {
-            event.preventDefault();
+<script>
 
-            const rmPhotoInput = document.getElementById('rmPhoto');
-            const file = rmPhotoInput.files[0];
-            
-            if (!file) {
-                showMessage("Please upload an RM photo.");
-                return;
-            }
+const form = document.getElementById("posterForm");
+const canvas = document.getElementById("posterCanvas");
+const ctx = canvas.getContext("2d");
+const downloadBtn = document.getElementById("downloadBtn");
 
-            let rmDesignation = rmDesignationSelect.value;
-            if (rmDesignation === 'Other') {
-                rmDesignation = otherDesignationInput.value;
-                if (!rmDesignation) {
-                    showMessage("Please specify the other designation.");
-                    return;
-                }
-            }
-            
-            posterForm.style.display = 'none';
-            loadingIndicator.style.display = 'flex';
+form.addEventListener("submit", function(e){
+e.preventDefault();
 
-            const data = {
-                rmName: document.getElementById('rmName').value,
-                rmDesignation: rmDesignation,
-                policyType: document.getElementById('policyType').value,
-                isBbhQualified: bbhQualificationCheckbox.checked,
-                branchName: document.getElementById('branchName').value,
-                clusterName: document.getElementById('clusterName').value,
-                premium: document.getElementById('premium').value,
-                productType: document.getElementById('productType').value
-            };
+const file = document.getElementById("rmPhoto").files[0];
+const reader = new FileReader();
 
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const rmImage = new Image();
-                rmImage.src = event.target.result;
+reader.onload = function(event){
 
-                const logoAB = new Image();
-                logoAB.src = logoUrlAB;
+const img = new Image();
+img.onload = function(){
 
-                const logoHDFC = new Image();
-                logoHDFC.src = logoUrlHDFC;
-                
-                let loadedCount = 0;
-                const totalToLoad = 3; 
-                
-                const checkIfLoaded = () => {
-                    loadedCount++;
-                    if (loadedCount === totalToLoad) {
-                        drawPoster(rmImage, logoAB, logoHDFC, data);
-                        loadingIndicator.style.display = 'none';
-                        posterCanvas.style.display = 'block';
-                        downloadBtn.style.display = 'block';
-                    }
-                };
+drawPoster(img,{
+rmName: rmName.value,
+designation: rmDesignation.value,
+nli: nliType.value,
+level: clubLevel.value,
+branch: branchName.value,
+cluster: clusterName.value,
+premium: premium.value,
+product: productType.value
+});
 
-                rmImage.onload = checkIfLoaded;
-                logoAB.onload = checkIfLoaded;
-                logoHDFC.onload = checkIfLoaded;
-                
-                rmImage.onerror = () => { console.error("RM image failed to load."); checkIfLoaded(); };
-                logoAB.onerror = () => { console.error("Aditya Birla logo failed to load."); logoAB.src = ''; checkIfLoaded(); };
-                logoHDFC.onerror = () => { console.error("HDFC logo failed to load."); logoHDFC.src = ''; checkIfLoaded(); };
-            };
-            reader.readAsDataURL(file);
-        });
+form.style.display="none";
+canvas.style.display="block";
+downloadBtn.style.display="block";
+};
 
-        function showMessage(message) {
-            const container = document.querySelector('.container');
-            let messageBox = document.createElement('div');
-            messageBox.id = 'messageBox';
-            messageBox.className = 'fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 z-50';
-            messageBox.innerHTML = `
-                <div class="bg-white p-6 rounded-lg shadow-xl text-center flex flex-col items-center gap-4">
-                    <p class="text-lg font-semibold text-gray-800">${message}</p>
-                    <button onclick="this.parentNode.parentNode.style.display='none'" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700">OK</button>
-                </div>
-            `;
-            document.body.appendChild(messageBox);
-        }
+img.src = event.target.result;
+};
 
-        function drawStar(ctx, cx, cy, spikes, outerRadius, innerRadius, color) {
-            let rot = Math.PI / 2 * 3;
-            let x = cx;
-            let y = cy;
-            let step = Math.PI / spikes;
+reader.readAsDataURL(file);
+});
 
-            ctx.beginPath();
-            ctx.moveTo(cx, cy - outerRadius);
-            for (i = 0; i < spikes; i++) {
-                x = cx + Math.cos(rot) * outerRadius;
-                y = cy + Math.sin(rot) * outerRadius;
-                ctx.lineTo(x, y);
-                rot += step;
+function drawPoster(img,data){
 
-                x = cx + Math.cos(rot) * innerRadius;
-                y = cy + Math.sin(rot) * innerRadius;
-                ctx.lineTo(x, y);
-                rot += step;
-            }
-            ctx.lineTo(cx, cy - outerRadius);
-            ctx.closePath();
-            ctx.fillStyle = color;
-            ctx.fill();
-        }
+// Background
+const gradient = ctx.createLinearGradient(0,0,0,1350);
+gradient.addColorStop(0,"#0b1c2d");
+gradient.addColorStop(1,"#102a43");
+ctx.fillStyle = gradient;
+ctx.fillRect(0,0,1080,1350);
 
-        function drawPoster(rmImage, logoAB, logoHDFC, data) {
-            const canvasWidth = 1080;
-            const canvasHeight = 1350;
-            posterCanvas.width = canvasWidth;
-            posterCanvas.height = canvasHeight;
+// Dynamic Title
+ctx.fillStyle="#FFD700";
+ctx.textAlign="center";
+ctx.font="bold 80px Inter";
 
-            const gradient = ctx.createLinearGradient(0, 0, 0, canvasHeight);
-            gradient.addColorStop(0, '#e8eff5');
-            gradient.addColorStop(0.2, '#f5f8fa');
-            gradient.addColorStop(1, '#ffffff');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+let clubTitle = data.level === "Level 1"
+? "BBH-Champions Club"
+: "GHMD-Champions Club";
 
-            const logoMargin = 60;
-            
-            const hdfcLogoDesiredWidth = 280;
-            let hdfcLogoActualHeight = 0;
-            if (logoHDFC.complete && logoHDFC.naturalWidth > 0) {
-                hdfcLogoActualHeight = (logoHDFC.naturalHeight / logoHDFC.naturalWidth) * hdfcLogoDesiredWidth;
-            }
-            if (hdfcLogoActualHeight > 0) {
-                ctx.drawImage(logoHDFC, logoMargin, logoMargin, hdfcLogoDesiredWidth, hdfcLogoActualHeight);
-            }
+ctx.fillText(clubTitle,540,230);
 
-            const abLogoDesiredWidth = 230;
-            let abLogoActualHeight = 0;
-            if (logoAB.complete && logoAB.naturalWidth > 0) {
-                abLogoActualHeight = (logoAB.naturalHeight / logoAB.naturalWidth) * abLogoDesiredWidth;
-            }
-            if (abLogoActualHeight > 0) {
-                ctx.drawImage(logoAB, canvasWidth - abLogoDesiredWidth - logoMargin, logoMargin - 15, abLogoDesiredWidth, abLogoActualHeight);
-            }
+// Criteria
+ctx.fillStyle="#ffffff";
+ctx.font="bold 45px Inter";
+ctx.fillText(data.nli,540,310);
 
-            ctx.textAlign = 'center';
-            ctx.fillStyle = '#C20000';
-            ctx.font = 'bolder 90px Inter, sans-serif';
-            ctx.fillText("Hall of Fame", canvasWidth / 2, 280);
+// Trophy Left
+ctx.font="150px serif";
+ctx.fillText("🏆",200,550);
 
-            // Conditional text based on checkbox and policy type
-            ctx.fillStyle = '#1a3263';
-            ctx.font = 'bold 50px Inter, sans-serif';
-            if (data.isBbhQualified) {
-                ctx.fillText("Spearhead HI+LI Login criteria Met", canvasWidth / 2, 360);
-            } else if (data.policyType === 'Fresh') {
-                ctx.fillText("Fresh Health Champ (ABHI)", canvasWidth / 2, 360);
-            } else {
-                ctx.fillText("Health Champ (ABHI)", canvasWidth / 2, 360);
-            }
+// Trophy Right
+ctx.fillText("🏆",880,550);
 
-            const imageSize = 380;
-            const centerX = canvasWidth / 2;
-            const centerY = 360 + 250;
-            
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, imageSize / 2, 0, Math.PI * 2);
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
-            ctx.shadowBlur = 20;
-            ctx.shadowOffsetX = 0;
-            ctx.shadowOffsetY = 15;
-            ctx.fillStyle = '#ffffff';
-            ctx.fill();
-            ctx.restore();
+// Circular Image
+ctx.save();
+ctx.beginPath();
+ctx.arc(540,600,190,0,Math.PI*2);
+ctx.closePath();
+ctx.clip();
 
-            let sourceX = 0;
-            let sourceY = 0;
-            let sourceSize = Math.min(rmImage.width, rmImage.height);
-            if (rmImage.width > rmImage.height) {
-                sourceX = (rmImage.width - sourceSize) / 2;
-            } else {
-                sourceY = (rmImage.height - sourceSize) / 2;
-            }
+let size = Math.min(img.width,img.height);
+ctx.drawImage(img,
+(img.width-size)/2,
+(img.height-size)/2,
+size,size,
+540-190,
+600-190,
+380,380);
 
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, imageSize / 2, 0, Math.PI * 2);
-            ctx.closePath();
-            ctx.clip();
-            ctx.drawImage(rmImage, sourceX, sourceY, sourceSize, sourceSize, centerX - imageSize / 2, centerY - imageSize / 2, imageSize, imageSize);
-            ctx.restore();
+ctx.restore();
 
-            // Draw Stars
-            const starColor = '#FFC423';
-            const starSpikes = 5;
+// Golden Border
+ctx.beginPath();
+ctx.arc(540,600,190,0,Math.PI*2);
+ctx.lineWidth=15;
+ctx.strokeStyle="#FFD700";
+ctx.stroke();
 
-            // Stars on the left
-            drawStar(ctx, centerX - 250, centerY, starSpikes, 45, 20, starColor);
-            drawStar(ctx, centerX - 330, centerY - 60, starSpikes, 35, 15, starColor);
-            drawStar(ctx, centerX - 400, centerY + 30, starSpikes, 25, 10, starColor);
+// Name
+ctx.fillStyle="#FFD700";
+ctx.font="bold 55px Inter";
+ctx.fillText(data.rmName,540,900);
 
-            // Stars on the right
-            drawStar(ctx, centerX + 250, centerY, starSpikes, 45, 20, starColor);
-            drawStar(ctx, centerX + 330, centerY - 60, starSpikes, 35, 15, starColor);
-            drawStar(ctx, centerX + 400, centerY + 30, starSpikes, 25, 10, starColor);
+// Designation
+ctx.font="bold 40px Inter";
+ctx.fillText("("+data.designation+")",540,950);
 
-            // Draw Gold Circle Border
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, imageSize / 2, 0, Math.PI * 2);
-            ctx.lineWidth = 18;
-            ctx.strokeStyle = '#FFC423';
-            ctx.stroke();
+// Branch & Cluster
+ctx.fillStyle="#ffffff";
+ctx.font="30px Inter";
+ctx.fillText("Branch: "+data.branch+" | Cluster: "+data.cluster,540,1000);
 
-            ctx.textAlign = 'center';
-            let currentY = centerY + imageSize / 2 + 80;
-            
-            ctx.fillStyle = '#1a3263';
-            ctx.font = 'bold 52px Inter, sans-serif';
-            ctx.fillText(`${data.rmName}`, canvasWidth / 2, currentY);
+// Premium (BIG)
+ctx.fillStyle="#FFD700";
+ctx.font="bold 85px Inter";
+ctx.fillText("₹"+data.premium,540,1100);
 
-            // Draw the designation with a slight gap
-            currentY += 50;
-            ctx.font = 'bold 40px Inter, sans-serif';
-            ctx.fillText(`(${data.rmDesignation})`, canvasWidth / 2, currentY);
-            
-            currentY += 50;
+// Product
+ctx.fillStyle="#ffffff";
+ctx.font="30px Inter";
+ctx.fillText("Product: "+data.product,540,1150);
+}
 
-            ctx.font = 'bold 32px Inter, sans-serif';
-            ctx.fillText(`Branch: ${data.branchName} | Cluster: ${data.clusterName}`, canvasWidth / 2, currentY);
-            currentY += 90;
-            
-            const premiumText = `Premium : ${data.premium}`;
-            ctx.font = 'bold 60px Inter, sans-serif';
-            const premiumTextMetrics = ctx.measureText(premiumText);
-            const premiumTextWidth = premiumTextMetrics.width;
-            const boxPadding = 40;
-            const boxWidth = premiumTextWidth + (boxPadding * 2);
-            const boxHeight = 95;
-            const boxX = (canvasWidth / 2) - (boxWidth / 2);
-            const boxY = currentY - 70;
+downloadBtn.addEventListener("click",function(){
+const link=document.createElement("a");
+link.download="Champions_Club_Poster.png";
+link.href=canvas.toDataURL();
+link.click();
+});
 
-            ctx.fillStyle = '#FFDCDC';
-            ctx.beginPath();
-            ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 15);
-            ctx.fill();
+</script>
 
-            ctx.strokeStyle = '#000000';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            
-            ctx.fillStyle = '#E70000';
-            ctx.fillText(premiumText, canvasWidth / 2, currentY);
-            currentY += 70;
-            
-            ctx.fillStyle = '#4a5568';
-            ctx.font = '32px Inter, sans-serif';
-            ctx.fillText(`Product Type: ${data.productType}`, canvasWidth / 2, currentY);
-            currentY += 60;
-            
-            // ASM and SM names are no longer displayed here.
-        }
-
-        downloadBtn.addEventListener('click', function() {
-            const imageDataUrl = posterCanvas.toDataURL('image/png');
-            const downloadLink = document.createElement('a');
-            downloadLink.href = imageDataUrl;
-            downloadLink.download = `aditya-birla-poster.png`;
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
-        });
-    </script>
 </body>
 </html>
