@@ -185,9 +185,8 @@
         const loadImage = (src) => {
             return new Promise((resolve) => {
                 const img = new Image();
-                // Removed crossOrigin for local testing compatibility
                 img.onload = () => resolve(img);
-                img.onerror = () => resolve(null); 
+                img.onerror = () => resolve(null); // Return null if missing, prevents breaking
                 img.src = src;
             });
         };
@@ -259,17 +258,19 @@
             ctx.fillStyle = "#ffffff";
             ctx.fillRect(0,0,1080,150);
 
-            /* Draw Logos Safely */
+            /* Draw Logos Safely and Centered Vertically */
             if(hdfcLogo){
                 let width = 200;
                 let height = (hdfcLogo.naturalHeight / hdfcLogo.naturalWidth) * width;
-                ctx.drawImage(hdfcLogo, 80, 40, width, height);
+                let yPos = (150 - height) / 2; // Center vertically in the 150px header
+                ctx.drawImage(hdfcLogo, 80, yPos, width, height);
             }
 
             if(abLogo){
                 let width = 200;
                 let height = (abLogo.naturalHeight / abLogo.naturalWidth) * width;
-                ctx.drawImage(abLogo, 800, 40, width, height);
+                let yPos = (150 - height) / 2; // Center vertically in the 150px header
+                ctx.drawImage(abLogo, 800, yPos, width, height);
             }
 
             /* Gold Gradient */
