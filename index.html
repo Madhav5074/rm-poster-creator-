@@ -208,16 +208,20 @@
             const reader = new FileReader();
             reader.onload = async function(ev){
                 
-                // Wait for all 3 images to load perfectly before drawing
+                // ADDED THE './assets/' PATH BACK IN HERE
                 const [profileImg, hdfcLogo, abLogo] = await Promise.all([
                     loadImage(ev.target.result),
-                    loadImage('./hdfc-logo.PNG'), 
-                    loadImage('./aditya-birla-logo.PNG') 
+                    loadImage('./assets/hdfc-logo.PNG'), 
+                    loadImage('./assets/aditya-birla-logo.PNG') 
                 ]);
 
                 // Check if logos loaded and warn the user if they didn't
                 if (!hdfcLogo || !abLogo) {
-                    alert("Warning: One or both logos did not load! Please ensure your image files are named EXACTLY 'hdfc-logo.PNG' and 'aditya-birla-logo.PNG'. Remember that GitHub is strictly case-sensitive (.png vs .PNG matters).");
+                    let missing = [];
+                    if(!hdfcLogo) missing.push("./assets/hdfc-logo.PNG");
+                    if(!abLogo) missing.push("./assets/aditya-birla-logo.PNG");
+                    
+                    alert("Missing files: " + missing.join(", ") + "\n\nPlease ensure these files exist in your 'assets' folder and the capitalization matches exactly (e.g., .png vs .PNG).");
                 }
 
                 let designation = rmDesignation.value === "Others" 
