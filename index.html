@@ -1,277 +1,340 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Champions Club – Award Night Premium</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-body { font-family:'Inter', sans-serif; background:#0b1220; }
-.container { max-width:550px; margin:auto; }
-canvas { border-radius:20px; width:100%; box-shadow:0 40px 100px rgba(0,0,0,0.6); }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Champions Club – Award Night Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: #0b1220; 
+        }
+        .container { 
+            max-width: 550px; 
+            margin: auto; 
+        }
+        canvas { 
+            border-radius: 20px; 
+            width: 100%; 
+            box-shadow: 0 40px 100px rgba(0,0,0,0.6); 
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #d4af37;
+            animation: spin 1s ease infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 
 <body class="flex items-center justify-center min-h-screen p-6">
 
-<div class="container bg-white p-8 rounded-3xl shadow-2xl">
+    <div class="container bg-white p-8 rounded-3xl shadow-2xl">
 
-<form id="posterForm" class="flex flex-col gap-4">
+        <form id="posterForm" class="flex flex-col gap-5">
+            <h1 class="text-3xl font-bold text-center text-blue-900 mb-2">
+                Champions Club – Award Night
+            </h1>
 
-<h1 class="text-3xl font-bold text-center text-blue-900">
-Champions Club – Award Night Premium
-</h1>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Upload RM Photo</label>
+                <input type="file" id="rmPhoto" accept="image/*" required class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer border p-2 rounded">
+            </div>
 
-<input type="file" id="rmPhoto" required class="border p-2 rounded">
-<input type="text" id="rmName" placeholder="RM Name" required class="border p-2 rounded">
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">RM Name</label>
+                <input type="text" id="rmName" placeholder="Enter RM Name" required class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
 
-<select id="rmDesignation" required class="border p-2 rounded">
-<option value="" disabled selected>Select Designation</option>
-<option value="RM">RM</option>
-<option value="PB">PB</option>
-<option value="PBA">PBA</option>
-<option value="Others">Others</option>
-</select>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Designation</label>
+                <select id="rmDesignation" required class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="" disabled selected>Select Designation</option>
+                    <option value="RM">RM</option>
+                    <option value="PB">PB</option>
+                    <option value="PBA">PBA</option>
+                    <option value="Others">Others</option>
+                </select>
+            </div>
 
-<input type="text" id="otherDesignation" placeholder="Enter Designation"
-class="border p-2 rounded hidden">
+            <div id="otherDesignationContainer" class="hidden">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Specify Designation</label>
+                <input type="text" id="otherDesignation" placeholder="Enter Designation" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
 
-<select id="nliType" required class="border p-2 rounded">
-<option value="" disabled selected>Select Criteria</option>
-<option value="NLI + LI Met">NLI + LI Met</option>
-<option value="NLI Met">NLI Met</option>
-</select>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Criteria Met</label>
+                <select id="nliType" required class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="" disabled selected>Select Criteria</option>
+                    <option value="NLI + LI Met">NLI + LI Met</option>
+                    <option value="NLI Met">NLI Met</option>
+                </select>
+            </div>
 
-<select id="clubLevel" required class="border p-2 rounded">
-<option value="" disabled selected>Select Level</option>
-<option value="Level 1">Level 1</option>
-<option value="Level 2">Level 2</option>
-</select>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Club Level</label>
+                <select id="clubLevel" required class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="" disabled selected>Select Level</option>
+                    <option value="Level 1">Level 1</option>
+                    <option value="Level 2">Level 2</option>
+                </select>
+            </div>
 
-<input type="text" id="branchName" placeholder="Branch Name" required class="border p-2 rounded">
-<input type="text" id="clusterName" placeholder="Cluster Name" required class="border p-2 rounded">
-<input type="text" id="premium" placeholder="Premium Amount" required class="border p-2 rounded">
-<input type="text" id="productType" placeholder="Product Type" required class="border p-2 rounded">
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Branch Name</label>
+                <input type="text" id="branchName" placeholder="Enter Branch Name" required class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
 
-<button type="submit" class="bg-black text-white p-3 rounded font-bold">
-Generate Poster
-</button>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Cluster Name</label>
+                <input type="text" id="clusterName" placeholder="Enter Cluster Name" required class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
 
-</form>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Premium Amount</label>
+                <input type="text" id="premium" placeholder="Enter Premium Amount" required class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
 
-<canvas id="posterCanvas" width="1080" height="1350" class="hidden mt-6"></canvas>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Product Type</label>
+                <input type="text" id="productType" placeholder="Enter Product Type" required class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
 
-<button id="downloadBtn" class="hidden mt-4 bg-yellow-600 text-white p-3 rounded font-bold">
-Download Poster
-</button>
+            <button type="submit" class="mt-2 bg-blue-900 text-white p-3 rounded-lg font-bold hover:bg-blue-800 transition">
+                Generate Poster
+            </button>
+        </form>
 
-</div>
+        <div id="loadingIndicator" class="hidden flex-col items-center gap-4 py-10">
+            <div class="spinner"></div>
+            <p class="text-gray-700 font-semibold">Generating your poster...</p>
+        </div>
 
-<script>
+        <div id="resultContainer" class="hidden flex-col items-center gap-6">
+            <canvas id="posterCanvas" width="1080" height="1350"></canvas>
+            <button id="downloadBtn" class="w-full bg-yellow-500 text-black p-3 rounded-lg font-bold hover:bg-yellow-600 transition shadow-lg">
+                Download Poster
+            </button>
+        </div>
 
-const canvas = document.getElementById("posterCanvas");
-const ctx = canvas.getContext("2d");
-const form = document.getElementById("posterForm");
-const downloadBtn = document.getElementById("downloadBtn");
+    </div>
 
-const rmPhoto = document.getElementById("rmPhoto");
-const rmName = document.getElementById("rmName");
-const rmDesignation = document.getElementById("rmDesignation");
-const otherDesignation = document.getElementById("otherDesignation");
-const nliType = document.getElementById("nliType");
-const clubLevel = document.getElementById("clubLevel");
-const branchName = document.getElementById("branchName");
-const clusterName = document.getElementById("clusterName");
-const premiumInput = document.getElementById("premium");
-const productType = document.getElementById("productType");
+    <script>
+        const canvas = document.getElementById("posterCanvas");
+        const ctx = canvas.getContext("2d");
+        const form = document.getElementById("posterForm");
+        const downloadBtn = document.getElementById("downloadBtn");
+        const loadingIndicator = document.getElementById("loadingIndicator");
+        const resultContainer = document.getElementById("resultContainer");
 
-const hdfcLogo = new Image();
-hdfcLogo.src = "./assets/hdfc-logo.PNG";
+        const rmPhoto = document.getElementById("rmPhoto");
+        const rmName = document.getElementById("rmName");
+        const rmDesignation = document.getElementById("rmDesignation");
+        const otherDesignationContainer = document.getElementById("otherDesignationContainer");
+        const otherDesignation = document.getElementById("otherDesignation");
+        const nliType = document.getElementById("nliType");
+        const clubLevel = document.getElementById("clubLevel");
+        const branchName = document.getElementById("branchName");
+        const clusterName = document.getElementById("clusterName");
+        const premiumInput = document.getElementById("premium");
+        const productType = document.getElementById("productType");
 
-const abLogo = new Image();
-abLogo.src = "./assets/aditya-birla-logo.PNG";
+        // Format currency
+        premiumInput.addEventListener("input", function(){
+            let value = this.value.replace(/[^0-9]/g,'');
+            if(value){ 
+                this.value = "₹" + Number(value).toLocaleString("en-IN"); 
+            } else { 
+                this.value = ""; 
+            }
+        });
 
-/* ₹ formatting */
-premiumInput.addEventListener("input", function(){
-let value=this.value.replace(/[^0-9]/g,'');
-if(value){ this.value="₹"+Number(value).toLocaleString("en-IN"); }
-else{ this.value=""; }
-});
+        // Toggle Others designation
+        rmDesignation.addEventListener("change", function(){
+            if(this.value === "Others"){
+                otherDesignationContainer.classList.remove("hidden");
+                otherDesignation.required = true;
+            } else {
+                otherDesignationContainer.classList.add("hidden");
+                otherDesignation.required = false;
+                otherDesignation.value = "";
+            }
+        });
 
-/* Others designation */
-rmDesignation.addEventListener("change", function(){
-if(this.value==="Others"){
-otherDesignation.classList.remove("hidden");
-otherDesignation.required=true;
-}else{
-otherDesignation.classList.add("hidden");
-otherDesignation.required=false;
-otherDesignation.value="";
-}
-});
+        // Helper function to load images safely
+        const loadImage = (src) => {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = () => resolve(null); // Return null if missing, prevents breaking
+                img.src = src;
+            });
+        };
 
-form.addEventListener("submit", function(e){
-e.preventDefault();
+        form.addEventListener("submit", function(e){
+            e.preventDefault();
 
-if(!rmPhoto.files[0]){
-alert("Upload RM Photo");
-return;
-}
+            if(!rmPhoto.files[0]){
+                alert("Please upload an RM Photo");
+                return;
+            }
 
-const reader = new FileReader();
+            form.classList.add("hidden");
+            loadingIndicator.classList.remove("hidden");
+            loadingIndicator.classList.add("flex");
 
-reader.onload = function(ev){
+            const reader = new FileReader();
+            reader.onload = async function(ev){
+                
+                // Wait for all 3 images to load perfectly before drawing
+                const [profileImg, hdfcLogo, abLogo] = await Promise.all([
+                    loadImage(ev.target.result),
+                    loadImage('./hdfc-logo.PNG'), // Fixed path
+                    loadImage('./aditya-birla-logo.PNG') // Fixed path
+                ]);
 
-const img = new Image();
+                let designation = rmDesignation.value === "Others" 
+                    ? otherDesignation.value 
+                    : rmDesignation.value;
 
-img.onload = function(){
+                drawPoster(profileImg, hdfcLogo, abLogo, {
+                    rmName: rmName.value.toUpperCase(),
+                    designation: designation,
+                    nli: nliType.value,
+                    level: clubLevel.value,
+                    branch: branchName.value,
+                    cluster: clusterName.value,
+                    premium: premiumInput.value,
+                    product: productType.value
+                });
 
-let designation = rmDesignation.value==="Others"
-? otherDesignation.value
-: rmDesignation.value;
+                loadingIndicator.classList.add("hidden");
+                loadingIndicator.classList.remove("flex");
+                resultContainer.classList.remove("hidden");
+                resultContainer.classList.add("flex");
+            };
+            reader.readAsDataURL(rmPhoto.files[0]);
+        });
 
-drawPoster(img,{
-rmName: rmName.value.toUpperCase(),
-designation,
-nli: nliType.value,
-level: clubLevel.value,
-branch: branchName.value,
-cluster: clusterName.value,
-premium: premiumInput.value,
-product: productType.value
-});
+        function drawPoster(profile, hdfcLogo, abLogo, data){
+            ctx.clearRect(0,0,1080,1350);
 
-form.classList.add("hidden");
-canvas.classList.remove("hidden");
-downloadBtn.classList.remove("hidden");
+            /* Stage Gradient Background */
+            const bg = ctx.createLinearGradient(0,0,0,1350);
+            bg.addColorStop(0,"#000814");
+            bg.addColorStop(0.4,"#001d3d");
+            bg.addColorStop(1,"#000814");
+            ctx.fillStyle = bg;
+            ctx.fillRect(0,0,1080,1350);
 
-};
+            /* Top Header Bar */
+            ctx.fillStyle = "rgba(255,255,255,0.05)";
+            ctx.fillRect(0,0,1080,150);
 
-img.src = ev.target.result;
-};
+            /* Draw Logos Safely */
+            if(hdfcLogo){
+                let width = 200;
+                let height = (hdfcLogo.naturalHeight / hdfcLogo.naturalWidth) * width;
+                ctx.drawImage(hdfcLogo, 80, 40, width, height);
+            }
 
-reader.readAsDataURL(rmPhoto.files[0]);
-});
+            if(abLogo){
+                let width = 200;
+                let height = (abLogo.naturalHeight / abLogo.naturalWidth) * width;
+                ctx.drawImage(abLogo, 800, 40, width, height);
+            }
 
-function drawPoster(profile,data){
+            /* Gold Gradient */
+            const gold = ctx.createLinearGradient(0,0,1080,0);
+            gold.addColorStop(0,"#d4af37");
+            gold.addColorStop(0.5,"#fff5b1");
+            gold.addColorStop(1,"#d4af37");
 
-ctx.clearRect(0,0,1080,1350);
+            ctx.textAlign = "center";
 
-/* Stage Gradient Background */
-const bg = ctx.createLinearGradient(0,0,0,1350);
-bg.addColorStop(0,"#000814");
-bg.addColorStop(0.4,"#001d3d");
-bg.addColorStop(1,"#000814");
-ctx.fillStyle=bg;
-ctx.fillRect(0,0,1080,1350);
+            /* Title */
+            let title = data.level === "Level 1" ? "BBH-Champions Club" : "GHMD-Champions Club";
+            ctx.fillStyle = gold;
+            ctx.font = "bold 78px Inter";
+            ctx.fillText(title, 540, 260);
 
-/* Top Header Bar */
-ctx.fillStyle="rgba(255,255,255,0.05)";
-ctx.fillRect(0,0,1080,150);
+            /* Divider */
+            ctx.fillStyle = "rgba(255,215,0,0.6)";
+            ctx.fillRect(300, 280, 480, 3);
 
-/* Logos with correct proportions */
-if(hdfcLogo.complete){
-let width = 200;
-let height = hdfcLogo.naturalHeight / hdfcLogo.naturalWidth * width;
-ctx.drawImage(hdfcLogo,80,40,width,height);
-}
+            /* NLI */
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 44px Inter";
+            ctx.fillText(data.nli, 540, 330);
 
-if(abLogo.complete){
-let width = 200;
-let height = abLogo.naturalHeight / abLogo.naturalWidth * width;
-ctx.drawImage(abLogo,800,40,width,height);
-}
+            /* Profile Image inside Circle */
+            if(profile) {
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(540, 600, 170, 0, Math.PI * 2);
+                ctx.clip();
 
-/* Gold Gradient */
-const gold = ctx.createLinearGradient(0,0,1080,0);
-gold.addColorStop(0,"#d4af37");
-gold.addColorStop(0.5,"#fff5b1");
-gold.addColorStop(1,"#d4af37");
+                let size = Math.min(profile.width, profile.height);
+                let sourceX = (profile.width - size) / 2;
+                let sourceY = (profile.height - size) / 2;
+                
+                ctx.drawImage(profile, sourceX, sourceY, size, size, 370, 430, 340, 340);
+                ctx.restore();
+            }
 
-ctx.textAlign="center";
+            /* Gold Frame */
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = gold;
+            ctx.beginPath();
+            ctx.arc(540, 600, 170, 0, Math.PI * 2);
+            ctx.stroke();
 
-/* Title */
-let title = data.level==="Level 1"
-? "BBH-Champions Club"
-: "GHMD-Champions Club";
+            /* Name */
+            ctx.fillStyle = gold;
+            ctx.font = "bold 56px Inter";
+            ctx.fillText(data.rmName, 540, 900);
 
-ctx.fillStyle=gold;
-ctx.font="bold 78px Inter";
-ctx.fillText(title,540,260);
+            /* Designation */
+            ctx.font = "bold 34px Inter";
+            ctx.fillText("(" + data.designation + ")", 540, 940);
 
-/* Divider */
-ctx.fillStyle="rgba(255,215,0,0.6)";
-ctx.fillRect(300,280,480,3);
+            /* Branch */
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "26px Inter";
+            ctx.fillText("Branch: " + data.branch + " | Cluster: " + data.cluster, 540, 990);
 
-/* NLI */
-ctx.fillStyle="#ffffff";
-ctx.font="bold 44px Inter";
-ctx.fillText(data.nli,540,330);
+            /* Premium Plate */
+            ctx.fillStyle = "rgba(255,255,255,0.08)";
+            ctx.fillRect(280, 1030, 520, 110);
+            ctx.strokeStyle = "rgba(255,215,0,0.5)";
+            ctx.lineWidth = 3;
+            ctx.strokeRect(280, 1030, 520, 110);
 
-/* Profile */
-ctx.save();
-ctx.beginPath();
-ctx.arc(540,600,170,0,Math.PI*2);
-ctx.clip();
+            ctx.fillStyle = gold;
+            ctx.font = "bold 80px Inter";
+            ctx.fillText(data.premium, 540, 1110);
 
-let size=Math.min(profile.width,profile.height);
-ctx.drawImage(profile,
-(profile.width-size)/2,
-(profile.height-size)/2,
-size,size,
-370,430,
-340,340);
-ctx.restore();
+            /* Product */
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "26px Inter";
+            ctx.fillText("Product: " + data.product, 540, 1200);
+        }
 
-/* Gold Frame */
-ctx.lineWidth=10;
-ctx.strokeStyle=gold;
-ctx.beginPath();
-ctx.arc(540,600,170,0,Math.PI*2);
-ctx.stroke();
+        downloadBtn.addEventListener("click", function(){
+            const link = document.createElement("a");
+            link.download = "Champions_Club_Award_Night.png";
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        });
 
-/* Name */
-ctx.fillStyle=gold;
-ctx.font="bold 56px Inter";
-ctx.fillText(data.rmName,540,900);
-
-/* Designation */
-ctx.font="bold 34px Inter";
-ctx.fillText("("+data.designation+")",540,940);
-
-/* Branch */
-ctx.fillStyle="#ffffff";
-ctx.font="26px Inter";
-ctx.fillText("Branch: "+data.branch+" | Cluster: "+data.cluster,540,990);
-
-/* Premium Plate */
-ctx.fillStyle="rgba(255,255,255,0.08)";
-ctx.fillRect(280,1020,520,110);
-ctx.strokeStyle="rgba(255,215,0,0.5)";
-ctx.strokeRect(280,1020,520,110);
-
-ctx.fillStyle=gold;
-ctx.font="bold 80px Inter";
-ctx.fillText(data.premium,540,1095);
-
-/* Product */
-ctx.fillStyle="#ffffff";
-ctx.font="24px Inter";
-ctx.fillText("Product: "+data.product,540,1150);
-
-}
-
-downloadBtn.addEventListener("click",function(){
-const link=document.createElement("a");
-link.download="Champions_Club_Award_Night_Premium.png";
-link.href=canvas.toDataURL("image/png");
-link.click();
-});
-
-</script>
-
+    </script>
 </body>
 </html>
